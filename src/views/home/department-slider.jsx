@@ -26,7 +26,7 @@ const DepartmentSlider = ({ data }) => {
 
   return (
     <div className="my-8 overflow-hidden">
-      <h2 className="text-center text-2xl font-semibold mb-6">
+      <h2 className="text-center text-2xl text-[#333333] font-semibold mb-6">
         Shopping by Category
       </h2>
       <div className="slider-container overflow-hidden">
