@@ -1,7 +1,7 @@
 // import { BASE_URL, isLocal } from "@/utils/axios_instance";
 import { getServerSideData } from "@/utils/get-api";
 import Layout from "@/layout/page";
-import { Hero } from "@/views/home";
+import { DepartmentSlider, Hero } from "@/views/home";
 
 export async function metadata() {
   // const resp = await getServerSideData("api/home-meta/?populate=*");
@@ -43,8 +43,12 @@ export async function metadata() {
 const Page = async () => {
   const urls = {
     hero: `/home-hero-section/?populate=*`,
+    department: `/departments/?populate=*&sort=id`,
   };
-  const [hero] = await Promise.all([getServerSideData(urls.hero)]);
+  const [hero, department] = await Promise.all([
+    getServerSideData(urls.hero),
+    getServerSideData(urls.department, true),
+  ]);
   // const jsonLd = {
   //   "@context": "https://schema.org",
   //   "@type": "Organization",
@@ -63,6 +67,7 @@ const Page = async () => {
       /> */}
       <Layout>
         <Hero data={hero} />
+        <DepartmentSlider data={department?.data} />
       </Layout>
     </div>
   );
