@@ -72,7 +72,7 @@ const Header = ({ data, departments, shops }) => {
               <Link href={department.attributes.slug} className="outline-none">
                 <Button
                   variant="text"
-                  className="flex items-center !text-[13px] !text-[#333333] hover:!text-primary hover:!bg-transparent focus:!outline-none font-bold !font-lato uppercase !p-0 "
+                  className="flex items-center !text-[13px] !text-third hover:!text-primary hover:!bg-transparent focus:!outline-none font-bold !font-lato uppercase !p-0 "
                 >
                   {department.attributes.name}
                   <div className="w-3 h-3">

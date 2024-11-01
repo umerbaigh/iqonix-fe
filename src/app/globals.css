@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.blocks-class a {
+  color: #8b572a !important;
+  font-weight: 600;
+}
