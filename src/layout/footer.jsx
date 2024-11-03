@@ -1,65 +1,53 @@
-"use client";
-// import { useEffect } from "react";
-// import { FooterCol, IconButton } from "@/components";
-// import { useParams } from "next/navigation";
-// import Image from "next/image";
+import { ProductByDepartment, SocialLinks } from "@/components";
+import Image from "next/image";
+import Link from "next/link";
 
-const Footer = ({ data }) => {
+const Footer = ({ data, icons }) => {
   return (
-    <div className="flex justify-center items-center w-full">
-      {/* <div className="max-w-[1440px] w-full px-5 sm:px-12 py-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-y-8">
-        <FooterCol title={data?.about?.title} items={data?.about?.links} />
-        <FooterCol title={data?.support?.title} items={data?.support?.links} />
-        <FooterCol title={data?.faq?.title} items={data?.faq?.links} />
-        <FooterCol
-          title={data?.collaboration?.title}
-          items={data?.collaboration?.links}
-        />
-        <div className="col-span-2 sm:col-span-2">
-          <div className="flex items-center gap-2">
-            <Image
-              src={data?.title?.logo}
-              //priority={true}
-              width={32}
-              height={32}
-              alt="logo"
-            />
-            <p className="text-primary text-xl font-plus leading-9 font-bold">
-              {data?.title?.name}
+    <div className="flex justify-center items-center w-full bg-[#f7f7f7]">
+      <div className="max-w-[1600px] w-full sm:mx-8 mx-4 my-6 flex flex-col lg:flex-row justify-between gap-8">
+        <div className="flex flex-col sm:flex-row justify-between w-full sm:w-[85%] lg:w-[55%] gap-8">
+          <div className="flex flex-col gap-6">
+            <Link href="/">
+              <Image
+                src={icons?.logo?.data?.attributes?.url}
+                width={160}
+                height={58}
+                alt="logo"
+              />
+            </Link>
+            <p className="text-sm font-lato text-[#767676]">
+              {data?.description}
             </p>
+            <SocialLinks data={icons?.social_links} />
           </div>
-          <p className="text-third font-plus leading-6 font-medium mt-2">
-            {data?.address}
-          </p>
-          <div className="flex gap-4 my-6">
-            {data?.logo?.map((item, index) => (
-              <a
-                key={index}
+          <div>
+            {data?.footer_links1?.map((item, index) => (
+              <Link
+                className="text-sm font-lato font-medium text-gray1 mb-4 block whitespace-nowrap"
                 href={item?.link}
-                aria-label={index}
-                target="_blank"
-                className="scale-1 hover:scale-[1.1] transition-all cursor-pointer"
+                key={index}
               >
-                <Image
-                  src={item?.icon}
-                  //priority={true}
-                  width={24}
-                  height={24}
-                  alt="icon"
-                  className="object-cover"
-                />
-              </a>
+                {item?.text}
+              </Link>
             ))}
           </div>
-          <a href={data?.whatsapp_button?.link} target="_blank">
-            <IconButton
-              text={data?.whatsapp_button?.title}
-              isStarted={true}
-              isWhatsapp={true}
-            />
-          </a>
+          <div>
+            {data?.footer_links2?.map((item, index) => (
+              <Link
+                className="text-sm font-lato font-medium text-gray1 mb-4 block whitespace-nowrap"
+                href={item?.link}
+                key={index}
+              >
+                {item?.text}
+              </Link>
+            ))}
+          </div>
         </div>
-      </div> */}
+        <div className="w-full max-w-[450px] lg:max-w-none lg:w-[37%]">
+          <ProductByDepartment isFooter={true} />
+        </div>
+      </div>
     </div>
   );
 };

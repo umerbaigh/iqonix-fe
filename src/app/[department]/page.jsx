@@ -2,14 +2,7 @@
 import { getServerSideData } from "@/utils/get-api";
 import { getGraphql } from "@/utils/get-graphql-api";
 import Layout from "@/layout/page";
-import {
-  AboutUs,
-  DepartmentSlider,
-  Hero,
-  ProductCards,
-  Products,
-  Shop,
-} from "@/views/home";
+import { Categories, Products } from "@/views/departments";
 
 export async function metadata() {
   // const resp = await getServerSideData("api/home-meta/?populate=*");
@@ -48,59 +41,29 @@ export async function metadata() {
   // };
 }
 
-const Page = async () => {
+const Page = async ({ params, searchParams }) => {
+  const { page } = (await searchParams) || 1;
+  // console.log("page", page);
+  const { department } = await params;
+  const breadcrumbs = ["Home Page", department];
   const urls = {
-    hero: `/home-hero-section/?populate=*`,
-    department: `/departments/?populate=image&populate=icon&sort=id`,
-    card: `/home-product-cards/?populate=*`,
-    about: `/home-about/?populate=*`,
-    shop: `/shops/?populate=*`,
+    categories: `/departments/?filters[slug][$eq]=/${department}&populate[categories][populate]=*`,
   };
-  const [hero, department, card, about, shop] = await Promise.all([
-    getServerSideData(urls.hero),
-    getServerSideData(urls.department, true),
-    getServerSideData(urls.card, true),
-    getServerSideData(urls.about),
-    getServerSideData(urls.shop, true),
+  const [categories] = await Promise.all([
+    getServerSideData(urls.categories, true),
   ]);
-  const query = `
-  query {
-    departments {
-      data {
-        id
-        attributes {
-          name
-          icon {
-            data {
-              attributes {
-                url
-                name
-              }
-            }
-          }
-          products(pagination: { limit: 5 }) {
-            data {
-              id
-              attributes {
-                product_name
-                regular_price
-                sale_price
-                product_image
-                shops {
-                  data {
-                    id
-                    attributes {
-                      name
-                    }
-                  }
-                }
-                categories {
-                  data {
-                    id
-                    attributes {
-                      name
-                    }
-                  }
+  // console.log(categories?.data[0]?.attributes?.categories?.data);
+  const query1 = `
+    query {
+      departments(filters: { slug: { eq: "${department}" } }) {
+        data {
+          id
+          attributes {
+            name
+            products {
+              meta {
+                pagination {
+                  total
                 }
               }
             }
@@ -108,10 +71,35 @@ const Page = async () => {
         }
       }
     }
-  }
-`;
+  `;
 
-  const departmentsGraphql = await getGraphql(query, true);
+  const query2 = `
+    query {
+      departments(filters: { slug: { eq: "/${department}" } }) {
+        data {
+          id
+          attributes {
+            name
+            products(pagination: { page: ${page}, pageSize: 2 }) {
+              data {
+                id
+                attributes {
+                  product_name
+                  regular_price
+                  sale_price
+                  product_image 
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  `;
+
+  // const totalCount = await getGraphql(query1, true);
+  const products = await getGraphql(query2, true);
+  const totalCount = 128912;
   // const jsonLd = {
   //   "@context": "https://schema.org",
   //   "@type": "Organization",
@@ -129,12 +117,17 @@ const Page = async () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       /> */}
       <Layout>
-        <Hero data={hero} />
-        <DepartmentSlider data={department?.data} />
-        <Products data={departmentsGraphql?.data?.departments?.data} />
-        <ProductCards data={card?.data} />
-        <AboutUs data={about} />
-        <Shop data={shop?.data} />
+        {/* <Products data={departmentsGraphql?.data?.departments?.data} /> */}
+        <Categories
+          totalCount={totalCount}
+          breadcrumbs={breadcrumbs}
+          categories={categories?.data[0]?.attributes?.categories?.data}
+        />
+        <Products
+          products={
+            products?.data?.departments?.data[0]?.attributes?.products?.data
+          }
+        />
       </Layout>
     </div>
   );

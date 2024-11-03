@@ -2,14 +2,6 @@
 import { getServerSideData } from "@/utils/get-api";
 import { getGraphql } from "@/utils/get-graphql-api";
 import Layout from "@/layout/page";
-import {
-  AboutUs,
-  DepartmentSlider,
-  Hero,
-  ProductCards,
-  Products,
-  Shop,
-} from "@/views/home";
 
 export async function metadata() {
   // const resp = await getServerSideData("api/home-meta/?populate=*");
@@ -48,7 +40,13 @@ export async function metadata() {
   // };
 }
 
-const Page = async () => {
+const Page = async ({ params }) => {
+  const parameters = await params;
+  const breadcrumbs = [
+    "Home Page",
+    parameters?.department,
+    parameters?.category,
+  ];
   const urls = {
     hero: `/home-hero-section/?populate=*`,
     department: `/departments/?populate=image&populate=icon&sort=id`,
@@ -86,7 +84,7 @@ const Page = async () => {
                 regular_price
                 sale_price
                 product_image
-                shops {
+                brand {
                   data {
                     id
                     attributes {
@@ -129,12 +127,7 @@ const Page = async () => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       /> */}
       <Layout>
-        <Hero data={hero} />
-        <DepartmentSlider data={department?.data} />
-        <Products data={departmentsGraphql?.data?.departments?.data} />
-        <ProductCards data={card?.data} />
-        <AboutUs data={about} />
-        <Shop data={shop?.data} />
+        {/* <Products data={departmentsGraphql?.data?.departments?.data} /> */}
       </Layout>
     </div>
   );

@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 import { Drawer, IconButton } from "@material-tailwind/react";
-// import { CloseNav, OpenNav } from "@/icons";
-// import { NavbarLinks, NavButtons, LangSelect } from "@/components";
 import Image from "next/image";
 
 const MobileNav = ({ navLinks, getStarted }) => {
