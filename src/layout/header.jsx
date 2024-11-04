@@ -58,7 +58,7 @@ const Header = ({ data, departments, shops }) => {
           >
             <MenuHandler>
               <Link
-                href={department?.attributes?.slug}
+                href={`${department?.attributes?.slug}/?page=1`}
                 className="outline-none"
               >
                 <Button

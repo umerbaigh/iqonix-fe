@@ -2,11 +2,16 @@
 import { useSearchParams, useParams } from "next/navigation";
 import Link from "next/link";
 
-const Categories = ({ totalCount, breadcrumbs, categories }) => {
+const ITEMS_PER_PAGE = 2;
+
+const Categories = ({ totalProducts, breadcrumbs, categories }) => {
   const searchParams = useSearchParams();
   const { department } = useParams();
 
-  const page = searchParams.get("page");
+  const page = parseInt(searchParams.get("page")) || 1;
+
+  const startIndex = (page - 1) * ITEMS_PER_PAGE + 1;
+  const endIndex = Math.min(page * ITEMS_PER_PAGE, totalProducts);
   return (
     <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-8">
       <div className="flex items-start justify-between w-full py-8 border-b border-[#0000001b]">
@@ -29,7 +34,9 @@ const Categories = ({ totalCount, breadcrumbs, categories }) => {
         </div>
         <div>
           <p className="text-[#777777] text-sm font-lato">
-            Showing results 1 – 35 of {totalCount}
+            {totalProducts > ITEMS_PER_PAGE
+              ? `Showing results ${startIndex} – ${endIndex} of ${totalProducts}`
+              : `Showing all ${totalProducts} results`}
           </p>
         </div>
       </div>

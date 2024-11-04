@@ -42,7 +42,7 @@ export async function metadata() {
 }
 
 const Page = async ({ params, searchParams }) => {
-  const { page } = (await searchParams) || 1;
+  const { page = 1, order } = (await searchParams) || {};
   // console.log("page", page);
   const { department } = await params;
   const breadcrumbs = ["Home Page", department];
@@ -53,17 +53,30 @@ const Page = async ({ params, searchParams }) => {
     getServerSideData(urls.categories, true),
   ]);
   // console.log(categories?.data[0]?.attributes?.categories?.data);
+  let sortOption = "";
+  if (order === "date") {
+    sortOption = 'sort: "createdAt:desc"';
+  } else if (order === "price") {
+    sortOption = 'sort: "sale_price:asc"';
+  } else if (order === "price-desc") {
+    sortOption = 'sort: "sale_price:desc"';
+  }
   const query1 = `
     query {
-      departments(filters: { slug: { eq: "${department}" } }) {
+      departments(filters: { slug: { eq: "/${department}" } }) {
         data {
           id
           attributes {
             name
-            products {
-              meta {
-                pagination {
-                  total
+            products(pagination: { limit: -1 }, ${sortOption}) {
+              data {
+                id
+                attributes {
+                  color
+                  delivery
+                  width
+                  height
+                  depth
                 }
               }
             }
@@ -80,7 +93,7 @@ const Page = async ({ params, searchParams }) => {
           id
           attributes {
             name
-            products(pagination: { page: ${page}, pageSize: 2 }) {
+            products(pagination: { page: ${page}, pageSize: 2 }, ${sortOption}) {
               data {
                 id
                 attributes {
@@ -88,6 +101,22 @@ const Page = async ({ params, searchParams }) => {
                   regular_price
                   sale_price
                   product_image 
+                  shops {
+                    data {
+                      id
+                      attributes {
+                        name
+                      }
+                    }
+                  }
+                  categories {
+                    data {
+                      id
+                      attributes {
+                        name
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -97,9 +126,14 @@ const Page = async ({ params, searchParams }) => {
     }
   `;
 
-  // const totalCount = await getGraphql(query1, true);
-  const products = await getGraphql(query2, true);
-  const totalCount = 128912;
+  // const allProducts = await getGraphql(query1, true);
+  // const pageProducts = await getGraphql(query2, true);
+  const [allProducts, pageProducts] = await Promise.all([
+    getGraphql(query1, true),
+    getGraphql(query2, true),
+  ]);
+  const length =
+    allProducts?.data?.departments?.data[0]?.attributes?.products?.data?.length;
   // const jsonLd = {
   //   "@context": "https://schema.org",
   //   "@type": "Organization",
@@ -119,14 +153,18 @@ const Page = async ({ params, searchParams }) => {
       <Layout>
         {/* <Products data={departmentsGraphql?.data?.departments?.data} /> */}
         <Categories
-          totalCount={totalCount}
+          totalProducts={length}
           breadcrumbs={breadcrumbs}
           categories={categories?.data[0]?.attributes?.categories?.data}
         />
         <Products
-          products={
-            products?.data?.departments?.data[0]?.attributes?.products?.data
+          departmentName={
+            pageProducts?.data?.departments?.data[0]?.attributes?.name
           }
+          products={
+            pageProducts?.data?.departments?.data[0]?.attributes?.products?.data
+          }
+          totalProducts={length}
         />
       </Layout>
     </div>

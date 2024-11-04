@@ -19,11 +19,11 @@ const Layout = async ({ children }) => {
 
   return (
     <div className="min-h-[100vh] flex flex-col justify-between">
-      {/* <Header
+      <Header
         data={header}
         departments={departments?.data}
         shops={shops?.data}
-      /> */}
+      />
       {children}
       <Footer data={footer} icons={header} />
     </div>
