@@ -1,5 +1,6 @@
 import { Navigate } from "@/icons";
 import Image from "next/image";
+import Link from "next/link";
 
 // Function to calculate discount percentage
 const calculateDiscount = (regularPrice, salePrice) => {
@@ -11,17 +12,22 @@ const calculateDiscount = (regularPrice, salePrice) => {
 };
 
 const ProductCard = ({ product }) => {
-  const { product_name, product_image, regular_price, sale_price } =
+  const { product_name, product_image, slug, regular_price, sale_price } =
     product?.attributes || {};
-  const discount = calculateDiscount(regular_price, sale_price);
+  const discount = regular_price
+    ? calculateDiscount(regular_price, sale_price)
+    : 0;
 
   return (
-    <div className="border rounded-md shadow-md p-2 h-full flex flex-col justify-between">
+    <Link
+      href={`/product/${slug}`}
+      className="border rounded-md shadow-md p-2 h-full flex flex-col justify-between"
+    >
       <div>
         <div className="relative w-full">
           <Image
             src={product_image}
-            alt={product_name}
+            alt="product"
             width={500}
             height={250}
             className="rounded-md object-cover"
@@ -52,7 +58,7 @@ const ProductCard = ({ product }) => {
           </p>
         </div>
       </div>
-      <button className="relative w-full bg-[#536162] text-white text-[13px] font-lato py-5 group font-semibold rounded-md overflow-hidden">
+      <button className="relative w-full bg-[#536162] hover:bg-third transition-all ease-in-out duration-300 text-white text-[13px] font-lato py-5 group font-semibold rounded-md overflow-hidden">
         <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 transform group-hover:-translate-y-full opacity-100 group-hover:opacity-0 uppercase">
           TO THE SHOP
         </div>
@@ -62,7 +68,7 @@ const ProductCard = ({ product }) => {
           </div>
         </div>
       </button>
-    </div>
+    </Link>
   );
 };
 

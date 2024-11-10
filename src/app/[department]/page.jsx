@@ -42,7 +42,17 @@ export async function metadata() {
 }
 
 const Page = async ({ params, searchParams }) => {
-  const { page = 1, order } = (await searchParams) || {};
+  const {
+    page = 1,
+    order,
+    color,
+    delivery,
+    width,
+    height,
+    depth,
+    min,
+    max,
+  } = (await searchParams) || {};
   // console.log("page", page);
   const { department } = await params;
   const breadcrumbs = ["Home Page", department];
@@ -52,7 +62,7 @@ const Page = async ({ params, searchParams }) => {
   const [categories] = await Promise.all([
     getServerSideData(urls.categories, true),
   ]);
-  // console.log(categories?.data[0]?.attributes?.categories?.data);
+  // console.log(categories?.data[0]?.attributes);
   let sortOption = "";
   if (order === "date") {
     sortOption = 'sort: "createdAt:desc"';
@@ -61,6 +71,33 @@ const Page = async ({ params, searchParams }) => {
   } else if (order === "price-desc") {
     sortOption = 'sort: "sale_price:desc"';
   }
+
+  let productFilters = {};
+  if (color) productFilters.color = { eq: color };
+  if (delivery) productFilters.delivery = { eq: delivery };
+  if (width) productFilters.width = { eq: width };
+  if (height) productFilters.height = { eq: height };
+  if (depth) productFilters.depth = { eq: depth };
+
+  // Handle min and max for sale_price as a single filter object
+  if (min !== undefined || max !== undefined) {
+    productFilters.sale_price = {};
+    if (min !== undefined) productFilters.sale_price.gt = parseFloat(min) - 1;
+    if (max !== undefined) productFilters.sale_price.lt = parseFloat(max) + 1;
+  }
+
+  // Convert filters to GraphQL string format if there are any
+  const productFiltersString = Object.entries(productFilters).length
+    ? `filters: { ${Object.entries(productFilters)
+        .map(
+          ([key, value]) =>
+            `${key}: { ${Object.entries(value)
+              .map(([k, v]) => `${k}: ${typeof v === "string" ? `"${v}"` : v}`)
+              .join(", ")} }`
+        )
+        .join(", ")} }`
+    : "";
+
   const query1 = `
     query {
       departments(filters: { slug: { eq: "/${department}" } }) {
@@ -68,10 +105,11 @@ const Page = async ({ params, searchParams }) => {
           id
           attributes {
             name
-            products(pagination: { limit: -1 }, ${sortOption}) {
+            products(${productFiltersString}, pagination: { limit: -1 }, ${sortOption}) {
               data {
                 id
                 attributes {
+                  sale_price
                   color
                   delivery
                   width
@@ -93,7 +131,7 @@ const Page = async ({ params, searchParams }) => {
           id
           attributes {
             name
-            products(pagination: { page: ${page}, pageSize: 2 }, ${sortOption}) {
+            products(${productFiltersString}, pagination: { page: ${page}, pageSize: 2 }, ${sortOption}) {
               data {
                 id
                 attributes {
@@ -101,6 +139,7 @@ const Page = async ({ params, searchParams }) => {
                   regular_price
                   sale_price
                   product_image 
+                  slug
                   shops {
                     data {
                       id
@@ -126,12 +165,11 @@ const Page = async ({ params, searchParams }) => {
     }
   `;
 
-  // const allProducts = await getGraphql(query1, true);
-  // const pageProducts = await getGraphql(query2, true);
   const [allProducts, pageProducts] = await Promise.all([
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
+
   const length =
     allProducts?.data?.departments?.data[0]?.attributes?.products?.data?.length;
   // const jsonLd = {
@@ -151,7 +189,6 @@ const Page = async ({ params, searchParams }) => {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       /> */}
       <Layout>
-        {/* <Products data={departmentsGraphql?.data?.departments?.data} /> */}
         <Categories
           totalProducts={length}
           breadcrumbs={breadcrumbs}
@@ -161,10 +198,14 @@ const Page = async ({ params, searchParams }) => {
           departmentName={
             pageProducts?.data?.departments?.data[0]?.attributes?.name
           }
+          allProducts={
+            allProducts?.data?.departments?.data[0]?.attributes?.products?.data
+          }
           products={
             pageProducts?.data?.departments?.data[0]?.attributes?.products?.data
           }
           totalProducts={length}
+          description={categories?.data[0]?.attributes?.description}
         />
       </Layout>
     </div>
