@@ -4,43 +4,6 @@ import { getGraphql } from "@/utils/get-graphql-api";
 import Layout from "@/layout/page";
 import { Categories, Products } from "@/views/departments";
 
-export async function metadata() {
-  // const resp = await getServerSideData("api/home-meta/?populate=*");
-  // const faviconUrl = isLocal
-  //   ? BASE_URL + resp?.favicon.data.attributes.url
-  //   : resp?.favicon.data.attributes.url;
-  // return {
-  //   title: resp?.title,
-  //   description: resp?.description,
-  //   verification: {
-  //     google: "Aahq02UlpbJw3PbuUBWCiXqueMvK4qN0fZNrO4wUWcE",
-  //   },
-  //   icons: {
-  //     icon: [
-  //       {
-  //         url: faviconUrl,
-  //         href: faviconUrl,
-  //       },
-  //     ],
-  //   },
-  //   openGraph: {
-  //     url: `https://wawcd.com/`,
-  //     title: resp?.title,
-  //     description: resp?.description,
-  //     siteName: "WAWCD: WhatsApp CRM with Contact Saver, Broadcasting & more",
-  //     locale: "en_EN",
-  //     images: [
-  //       {
-  //         url: faviconUrl,
-  //         width: 800,
-  //         height: 600,
-  //         alt: resp?.title,
-  //       },
-  //     ],
-  //   },
-  // };
-}
-
 const Page = async ({ params, searchParams }) => {
   const {
     page = 1,
@@ -54,10 +17,10 @@ const Page = async ({ params, searchParams }) => {
     max,
   } = (await searchParams) || {};
   // console.log("page", page);
-  const { department } = await params;
-  const breadcrumbs = ["Home Page", department];
+  const { category } = await params;
+  const breadcrumbs = ["Home Page", category];
   const urls = {
-    categories: `/departments/?filters[slug][$eq]=/${department}&populate[categories][populate]=*`,
+    categories: `/categories/?filters[slug][$eq]=${category}&populate[sub_categories][populate]=*`,
   };
   const [categories] = await Promise.all([
     getServerSideData(urls.categories, true),
@@ -100,7 +63,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query1 = `
     query {
-      departments(filters: { slug: { eq: "/${department}" } }) {
+      categories(filters: { slug: { eq: "${category}" } }) {
         data {
           id
           attributes {
@@ -126,7 +89,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query2 = `
     query {
-      departments(filters: { slug: { eq: "/${department}" } }) {
+      categories(filters: { slug: { eq: "${category}" } }) {
         data {
           id
           attributes {
@@ -169,40 +132,29 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
+  console.log("allProducts====>", allProducts);
+  console.log("pageProducts====>", pageProducts);
 
   const length =
-    allProducts?.data?.departments?.data[0]?.attributes?.products?.data?.length;
-  // const jsonLd = {
-  //   "@context": "https://schema.org",
-  //   "@type": "Organization",
-  //   name: meta?.title,
-  //   image: isLocal
-  //     ? BASE_URL + template?.image?.data?.attributes?.url
-  //     : template?.image?.data?.attributes?.url,
-  //   description: meta?.description,
-  //   url: "https://wawcd.com/",
-  // };
+    allProducts?.data?.categories?.data[0]?.attributes?.products?.data?.length;
+
   return (
     <div>
-      {/* <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      /> */}
       <Layout>
         <Categories
           totalProducts={length}
           breadcrumbs={breadcrumbs}
-          categories={categories?.data[0]?.attributes?.categories?.data}
+          categories={categories?.data[0]?.attributes?.sub_categories?.data}
         />
         <Products
           departmentName={
-            pageProducts?.data?.departments?.data[0]?.attributes?.name
+            pageProducts?.data?.categories?.data[0]?.attributes?.name
           }
           allProducts={
-            allProducts?.data?.departments?.data[0]?.attributes?.products?.data
+            allProducts?.data?.categories?.data[0]?.attributes?.products?.data
           }
           products={
-            pageProducts?.data?.departments?.data[0]?.attributes?.products?.data
+            pageProducts?.data?.categories?.data[0]?.attributes?.products?.data
           }
           totalProducts={length}
           description={categories?.data[0]?.attributes?.description}

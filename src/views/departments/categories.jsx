@@ -6,7 +6,6 @@ const ITEMS_PER_PAGE = 2;
 
 const Categories = ({ totalProducts, breadcrumbs, categories }) => {
   const searchParams = useSearchParams();
-  const { department } = useParams();
 
   const page = parseInt(searchParams.get("page")) || 1;
 
@@ -40,17 +39,19 @@ const Categories = ({ totalProducts, breadcrumbs, categories }) => {
           </p>
         </div>
       </div>
-      <div className="flex gap-x-4 gap-y-4 sm:gap-x-6 flex-wrap items-center justify-center px-4 py-4 mt-4 mb-12 border border-[#7A7A7A] w-full">
-        {categories?.map((category) => (
-          <Link
-            href={`/${department}${category?.attributes?.slug}`}
-            key={category.id}
-            className="text-sm text-third font-lato uppercase font-semibold hover:text-primary"
-          >
-            {category?.attributes?.name}
-          </Link>
-        ))}
-      </div>
+      {categories?.length > 0 && (
+        <div className="flex gap-x-4 gap-y-4 sm:gap-x-6 flex-wrap items-center justify-center px-4 py-4 mt-4 mb-12 border border-[#7A7A7A] w-full">
+          {categories?.map((category) => (
+            <Link
+              href={`/cat/${category?.attributes?.slug}/?page=1`}
+              key={category.id}
+              className="text-sm text-third font-lato uppercase font-semibold hover:text-primary"
+            >
+              {category?.attributes?.name}
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
