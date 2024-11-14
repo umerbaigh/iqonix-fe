@@ -2,7 +2,7 @@ import { ProductByDepartment, SocialLinks } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
 
-const Footer = ({ data, icons }) => {
+const Footer = ({ data, icons, products }) => {
   return (
     <div className="flex justify-center items-center w-full bg-[#f7f7f7]">
       <div className="max-w-[1600px] w-full sm:mx-8 mx-4 my-6 flex flex-col lg:flex-row justify-between gap-8">
@@ -45,7 +45,7 @@ const Footer = ({ data, icons }) => {
           </div>
         </div>
         <div className="w-full max-w-[450px] lg:max-w-none lg:w-[37%]">
-          <ProductByDepartment isFooter={true} />
+          <ProductByDepartment isFooter={true} allProducts={products} />
         </div>
       </div>
     </div>

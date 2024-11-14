@@ -12,6 +12,7 @@ const SocialLinks = ({ data }) => {
               width={30}
               height={30}
               alt="logo"
+              className="min-w-[30px] min-h-[30px] max-w-[30px] max-h-[30px]"
             />
           </Link>
         </div>

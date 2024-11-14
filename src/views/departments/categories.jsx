@@ -13,7 +13,7 @@ const Categories = ({ totalProducts, breadcrumbs, categories }) => {
   const endIndex = Math.min(page * ITEMS_PER_PAGE, totalProducts);
   return (
     <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-8">
-      <div className="flex items-start justify-between w-full py-8 border-b border-[#0000001b]">
+      <div className="flex flex-col sm:flex-row gap-y-4 items-start justify-between w-full py-8 border-b border-[#0000001b]">
         <div className="flex gap-1">
           {breadcrumbs?.map((item, index) =>
             index !== breadcrumbs?.length - 1 ? (
@@ -31,16 +31,18 @@ const Categories = ({ totalProducts, breadcrumbs, categories }) => {
             )
           )}
         </div>
-        <div>
-          <p className="text-[#777777] text-sm font-lato">
-            {totalProducts > ITEMS_PER_PAGE
-              ? `Showing results ${startIndex} – ${endIndex} of ${totalProducts}`
-              : `Showing all ${totalProducts} results`}
-          </p>
-        </div>
+        {totalProducts > 1 && (
+          <div>
+            <p className="text-[#777777] text-sm font-lato">
+              {totalProducts > ITEMS_PER_PAGE
+                ? `Showing results ${startIndex} – ${endIndex} of ${totalProducts}`
+                : `Showing all ${totalProducts} results`}
+            </p>
+          </div>
+        )}
       </div>
       {categories?.length > 0 && (
-        <div className="flex gap-x-4 gap-y-4 sm:gap-x-6 flex-wrap items-center justify-center px-4 py-4 mt-4 mb-12 border border-[#7A7A7A] w-full">
+        <div className="flex gap-x-4 gap-y-4 sm:gap-x-6 flex-wrap items-center justify-center px-4 py-4 mt-4 border border-[#7A7A7A] w-full">
           {categories?.map((category) => (
             <Link
               href={`/cat/${category?.attributes?.slug}/?page=1`}

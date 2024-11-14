@@ -33,11 +33,11 @@ const Page = async ({ params, searchParams }) => {
   }
 
   let productFilters = {};
-  if (color) productFilters.color = { eq: color };
-  if (delivery) productFilters.delivery = { eq: delivery };
-  if (width) productFilters.width = { eq: width };
-  if (height) productFilters.height = { eq: height };
-  if (depth) productFilters.depth = { eq: depth };
+  if (color) productFilters.color = { eq: color.split("_").join(" ") };
+  if (delivery) productFilters.delivery = { eq: delivery.split("_").join(" ") };
+  if (width) productFilters.width = { eq: width.split("_").join(" ") };
+  if (height) productFilters.height = { eq: height.split("_").join(" ") };
+  if (depth) productFilters.depth = { eq: depth.split("_").join(" ") };
 
   // Handle min and max for sale_price as a single filter object
   if (min !== undefined || max !== undefined) {
@@ -135,9 +135,7 @@ const Page = async ({ params, searchParams }) => {
   return (
     <div>
       <Layout>
-        <div className="mb-12">
-          <Categories totalProducts={length} breadcrumbs={breadcrumbs} />
-        </div>
+        <Categories totalProducts={length} breadcrumbs={breadcrumbs} />
         <Products
           departmentName={pageProducts?.data?.shops?.data[0]?.attributes?.name}
           allProducts={

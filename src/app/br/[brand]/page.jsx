@@ -17,14 +17,12 @@ const Page = async ({ params, searchParams }) => {
     max,
   } = (await searchParams) || {};
   // console.log("page", page);
-  const { department } = await params;
-  const breadcrumbs = ["Home Page", department];
+  const { brand } = await params;
+  const breadcrumbs = ["Home Page", brand];
   const urls = {
-    categories: `/departments/?filters[slug][$eq]=/${department}&populate[categories][populate]=*`,
+    brands: `/brands/?filters[slug][$eq]=${brand}`,
   };
-  const [categories] = await Promise.all([
-    getServerSideData(urls.categories, true),
-  ]);
+  const [brands] = await Promise.all([getServerSideData(urls.brands, true)]);
   // console.log(categories?.data[0]?.attributes);
   let sortOption = "";
   if (order === "date") {
@@ -36,11 +34,11 @@ const Page = async ({ params, searchParams }) => {
   }
 
   let productFilters = {};
-  if (color) productFilters.color = { eq: color };
-  if (delivery) productFilters.delivery = { eq: delivery };
-  if (width) productFilters.width = { eq: width };
-  if (height) productFilters.height = { eq: height };
-  if (depth) productFilters.depth = { eq: depth };
+  if (color) productFilters.color = { eq: color.split("_").join(" ") };
+  if (delivery) productFilters.delivery = { eq: delivery.split("_").join(" ") };
+  if (width) productFilters.width = { eq: width.split("_").join(" ") };
+  if (height) productFilters.height = { eq: height.split("_").join(" ") };
+  if (depth) productFilters.depth = { eq: depth.split("_").join(" ") };
 
   // Handle min and max for sale_price as a single filter object
   if (min !== undefined || max !== undefined) {
@@ -63,7 +61,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query1 = `
     query {
-      departments(filters: { slug: { eq: "/${department}" } }) {
+      brands(filters: { slug: { eq: "${brand}" } }) {
         data {
           id
           attributes {
@@ -89,7 +87,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query2 = `
     query {
-      departments(filters: { slug: { eq: "/${department}" } }) {
+      brands(filters: { slug: { eq: "${brand}" } }) {
         data {
           id
           attributes {
@@ -132,9 +130,11 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
+  // console.log("All Products", allProducts);
+  // console.log("Page Products", pageProducts);
 
   const length =
-    allProducts?.data?.departments?.data[0]?.attributes?.products?.data?.length;
+    allProducts?.data?.brands?.data[0]?.attributes?.products?.data?.length;
 
   return (
     <div>
@@ -142,20 +142,18 @@ const Page = async ({ params, searchParams }) => {
         <Categories
           totalProducts={length}
           breadcrumbs={breadcrumbs}
-          categories={categories?.data[0]?.attributes?.categories?.data}
+          // categories={brands?.data[0]?.attributes?.categories?.data}
         />
         <Products
-          departmentName={
-            pageProducts?.data?.departments?.data[0]?.attributes?.name
-          }
+          departmentName={pageProducts?.data?.brands?.data[0]?.attributes?.name}
           allProducts={
-            allProducts?.data?.departments?.data[0]?.attributes?.products?.data
+            allProducts?.data?.brands?.data[0]?.attributes?.products?.data
           }
           products={
-            pageProducts?.data?.departments?.data[0]?.attributes?.products?.data
+            pageProducts?.data?.brands?.data[0]?.attributes?.products?.data
           }
           totalProducts={length}
-          description={categories?.data[0]?.attributes?.description}
+          description={brands?.data[0]?.attributes?.description}
         />
       </Layout>
     </div>

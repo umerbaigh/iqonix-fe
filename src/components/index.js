@@ -3,3 +3,4 @@ export { default as BlocksRender } from "./blocks-render";
 export { default as SocialLinks } from "./social-links";
 export { default as ProductByDepartment } from "./product-by-department";
 export { default as ProductCard } from "./product-card";
+export { default as SearchInput } from "./search-input";

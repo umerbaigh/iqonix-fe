@@ -3,15 +3,18 @@ import { getServerSideData } from "@/utils/get-api";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
-const ProductByDepartment = ({ name, isFooter = false }) => {
+const ProductByDepartment = ({ name, isFooter = false, allProducts }) => {
   const [products, setProducts] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const url = isFooter
-        ? "/products/?pagination[limit]=2"
-        : `/products/?filters[departments][name][$eq]=${name}&pagination[limit]=2`;
-      const resp = await getServerSideData(url, true);
-      setProducts(resp?.data);
+      if (isFooter) {
+        setProducts(allProducts);
+      } else {
+        const data = allProducts?.find(
+          (product) => product?.attributes?.name === name
+        );
+        setProducts(data?.attributes?.products?.data);
+      }
     };
 
     fetchData();
