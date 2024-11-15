@@ -96,7 +96,7 @@ const ProductDetail = ({ product }) => {
         </div>
       </div>
       <div className="flex flex-col md:flex-row gap-8 mx-4 sm:mx-8 my-8">
-        <div className="bg-[#fafafa] px-4 pb-6 rounded-lg w-[55%]">
+        <div className="bg-[#fafafa] px-4 pb-6 rounded-lg md:w-[55%]">
           <div className="html-desc font-poppins text-[#777777]">
             <div
               dangerouslySetInnerHTML={{
@@ -105,7 +105,7 @@ const ProductDetail = ({ product }) => {
             ></div>
           </div>
         </div>
-        <div className="bg-[#fafafa] text-secondary font-lato text-sm font-semibold px-4 py-6 rounded-lg w-[45%]">
+        <div className="bg-[#fafafa] text-secondary font-lato text-sm font-semibold px-4 py-6 rounded-lg md:w-[45%]">
           <h2 className="text-[22px] font-poppins mb-4">Product Detail</h2>
           <div className="w-full flex items-center justify-between pb-4">
             <p>Color</p>
