@@ -1,9 +1,7 @@
 const Search = ({ isMobile = false }) => {
   return (
     <svg
-      className={`h-5 w-5 text-[#242424] ${
-        !isMobile ? "absolute top-1/2 left-3 transform -translate-y-1/2" : ""
-      }`}
+      className={`h-5 w-5 text-[#242424]`}
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 19.9 19.7"
     >

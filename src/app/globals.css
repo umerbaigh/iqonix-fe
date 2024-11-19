@@ -131,3 +131,9 @@
   line-height: 150%;
   color: darkblue;
 }
+
+.slick-dots li.slick-active button:before {
+  color: #000 !important;
+  border-radius: 50%;
+  font-size: 8px;
+}

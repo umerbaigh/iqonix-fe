@@ -1,5 +1,10 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useRouter,
+  useSearchParams,
+  usePathname,
+  useParams,
+} from "next/navigation";
 import { ProductCard } from "@/components";
 import { useEffect, useState, useMemo } from "react";
 import {
@@ -16,10 +21,10 @@ const ITEMS_PER_PAGE = 2;
 
 const Filters = ({ allProducts, setLoading }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const searchParams = useSearchParams();
   const [open, setOpen] = useState([]);
   const [range, setRange] = useState([10, 3000]);
-  const [selectedFilters, setSelectedFilters] = useState({});
 
   const [minSalePrice, maxSalePrice] = useMemo(() => {
     const salePrices = allProducts
@@ -45,8 +50,8 @@ const Filters = ({ allProducts, setLoading }) => {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("min", range[0]);
     newSearchParams.set("max", range[1]);
-    newSearchParams.set("page", 1);
-    router.push(`?${newSearchParams.toString()}`);
+    const newPath = pathname.replace(/\/page\/\d+\/?$/, "/page/1/");
+    router.push(`${newPath}?${newSearchParams.toString()}`);
   };
 
   const handleAttributeFilter = (attribute, value) => {
@@ -58,15 +63,8 @@ const Filters = ({ allProducts, setLoading }) => {
       newSearchParams.set(attribute, value.split(" ").join("_"));
     }
 
-    newSearchParams.set("page", 1);
-    router.push(`?${newSearchParams.toString()}`);
-    setSelectedFilters((prevFilters) => ({
-      ...prevFilters,
-      [attribute]:
-        prevFilters[attribute] === value.split(" ").join("_")
-          ? null
-          : value.split(" ").join("_"),
-    }));
+    const newPath = pathname.replace(/\/page\/\d+\/?$/, "/page/1/");
+    router.push(`${newPath}?${newSearchParams.toString()}`);
   };
 
   const handleOpen = (index) => {
@@ -220,6 +218,8 @@ const Products = ({
   description,
 }) => {
   const router = useRouter();
+  const pathname = usePathname();
+  const params = useParams();
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
@@ -228,7 +228,7 @@ const Products = ({
     setOpen(!open);
   };
 
-  const currentPage = parseInt(searchParams.get("page")) || 1;
+  const currentPage = parseInt(params?.page) || 1;
   const totalPages = Math.ceil(totalProducts / ITEMS_PER_PAGE);
 
   const handleSortChange = (event) => {
@@ -240,17 +240,19 @@ const Products = ({
       newSearchParams.delete("order");
     } else {
       newSearchParams.set("order", order);
-      newSearchParams.set("page", 1);
     }
 
-    router.push(`?${newSearchParams.toString()}`);
+    const newPath = pathname.replace(/\/page\/\d+\/?$/, "/page/1/");
+    router.push(`${newPath}?${newSearchParams.toString()}`);
   };
 
   const handlePageChange = (page) => {
     setLoading(true);
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set("page", page);
-    router.push(`?${newSearchParams.toString()}`);
+    const newPath = pathname.replace(/\/page\/\d+\/?$/, `/page/${page}/`);
+    router.push(`${newPath}?${newSearchParams.toString()}`);
+    // newSearchParams.set("page", page);
+    // router.push(`?${newSearchParams.toString()}`);
   };
 
   useEffect(() => {
@@ -260,7 +262,7 @@ const Products = ({
   const appliedFilters = useMemo(() => {
     const filters = {};
     searchParams.forEach((value, key) => {
-      if (key !== "page" && key !== "order") {
+      if (key !== "order") {
         filters[key] = value.split("_").join(" ");
       }
     });
@@ -271,17 +273,17 @@ const Products = ({
     setLoading(true);
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.delete(filterKey);
-    router.push(`?${newSearchParams.toString()}`);
+    const newPath = pathname.replace(/\/page\/\d+\/?$/, "/page/1/");
+    router.push(`${newPath}?${newSearchParams.toString()}`);
   };
 
   const clearAllFilters = () => {
     setLoading(true);
     const newSearchParams = new URLSearchParams();
-    if (searchParams.get("page"))
-      newSearchParams.set("page", searchParams.get("page"));
     if (searchParams.get("order"))
       newSearchParams.set("order", searchParams.get("order"));
-    router.push(`?${newSearchParams.toString()}`);
+    const newPath = pathname.replace(/\/page\/\d+\/?$/, "/page/1/");
+    router.push(`${newPath}?${newSearchParams.toString()}`);
   };
 
   return (

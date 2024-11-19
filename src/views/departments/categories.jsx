@@ -5,9 +5,10 @@ import Link from "next/link";
 const ITEMS_PER_PAGE = 2;
 
 const Categories = ({ totalProducts, breadcrumbs, categories }) => {
+  const params = useParams();
   const searchParams = useSearchParams();
 
-  const page = parseInt(searchParams.get("page")) || 1;
+  const page = parseInt(params.page || 1);
 
   const startIndex = (page - 1) * ITEMS_PER_PAGE + 1;
   const endIndex = Math.min(page * ITEMS_PER_PAGE, totalProducts);
@@ -45,7 +46,7 @@ const Categories = ({ totalProducts, breadcrumbs, categories }) => {
         <div className="flex gap-x-4 gap-y-4 sm:gap-x-6 flex-wrap items-center justify-center px-4 py-4 mt-4 border border-[#7A7A7A] w-full">
           {categories?.map((category) => (
             <Link
-              href={`/cat/${category?.attributes?.slug}/?page=1`}
+              href={`/cat/${category?.attributes?.slug}/page/1`}
               key={category.id}
               className="text-sm text-third font-lato uppercase font-semibold hover:text-primary"
             >

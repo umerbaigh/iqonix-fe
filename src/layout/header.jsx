@@ -29,7 +29,7 @@ const Header = ({ data, departments, shops, allProducts }) => {
                   {departments?.map((department) => (
                     <Link
                       key={department?.id}
-                      href={`/dp/${department?.attributes?.slug}/?page=1`}
+                      href={`/dp/${department?.attributes?.slug}/page/1`}
                       className="outline-none !text-[13px] !text-third p-4 border-b hover:!text-primary font-bold !font-lato uppercase block"
                     >
                       {department?.attributes?.name}
@@ -71,7 +71,7 @@ const Header = ({ data, departments, shops, allProducts }) => {
           >
             <MenuHandler>
               <Link
-                href={`/dp/${department?.attributes?.slug}/?page=1`}
+                href={`/dp/${department?.attributes?.slug}/page/1`}
                 className="outline-none"
               >
                 <Button
@@ -85,14 +85,14 @@ const Header = ({ data, departments, shops, allProducts }) => {
                 </Button>
               </Link>
             </MenuHandler>
-            <MenuList className="max-w-[1600px] overflow-hidden w-full px-4 pb-8 pt-12">
+            <MenuList className="max-w-[1600px] overflow-hidden w-full px-12 pb-8 pt-12">
               <div className="grid grid-cols-5 outline-none">
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4 outline-none mb-8 col-span-3">
+                <div className="grid grid-rows-4 grid-flow-col gap-4 outline-none mb-8 col-span-3">
                   {department?.attributes?.categories?.data?.map((category) => (
                     <Link
                       key={category?.id}
-                      href={`/cat/${category?.attributes?.slug}`}
-                      className="text-gray1 font-sm hover:text-primary"
+                      href={`/cat/${category?.attributes?.slug}/page/1`}
+                      className="text-gray1 font-sm hover:text-primary w-fit"
                     >
                       {category?.attributes?.name}
                     </Link>
@@ -108,7 +108,7 @@ const Header = ({ data, departments, shops, allProducts }) => {
               <div className="flex justify-between items-center gap-4 outline-none max-w-[1200px] mx-auto">
                 {shops?.map((shop) => (
                   <div key={shop?.id}>
-                    <Link href={`/shop${shop?.attributes?.slug}`}>
+                    <Link href={`/shop/${shop?.attributes?.slug}/page/1`}>
                       <Image
                         src={shop?.attributes.image?.data?.attributes?.url}
                         width={200}

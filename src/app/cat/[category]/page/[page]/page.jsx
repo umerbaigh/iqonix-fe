@@ -5,19 +5,10 @@ import Layout from "@/layout/page";
 import { Categories, Products } from "@/views/departments";
 
 const Page = async ({ params, searchParams }) => {
-  const {
-    page = 1,
-    order,
-    color,
-    delivery,
-    width,
-    height,
-    depth,
-    min,
-    max,
-  } = (await searchParams) || {};
+  const { order, color, delivery, width, height, depth, min, max } =
+    (await searchParams) || {};
   // console.log("page", page);
-  const { category } = await params;
+  const { category, page } = await params;
   const breadcrumbs = ["Home Page", category];
   const urls = {
     categories: `/categories/?filters[slug][$eq]=${category}&populate[sub_categories][populate]=*`,
