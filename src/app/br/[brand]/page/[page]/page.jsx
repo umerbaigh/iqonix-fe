@@ -99,7 +99,7 @@ const Page = async ({ params, searchParams }) => {
                   product_name
                   regular_price
                   sale_price
-                  product_image
+                  product_image1
                   product_url 
                   slug
                   shops {

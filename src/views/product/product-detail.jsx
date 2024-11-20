@@ -20,7 +20,7 @@ const ProductDetail = ({ product }) => {
         <div className="md:w-1/2">
           <div className="relative">
             <Image
-              src={product?.product_image}
+              src={product?.product_image1}
               alt="product"
               width={800}
               height={650}

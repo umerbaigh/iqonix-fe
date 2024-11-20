@@ -106,7 +106,7 @@ const SearchInput = () => {
               }`}
             >
               <Image
-                src={item?.product_image}
+                src={item?.product_image1}
                 alt={item?.product_name}
                 width={65}
                 height={65}

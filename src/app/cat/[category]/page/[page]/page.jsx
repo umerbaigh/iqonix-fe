@@ -9,7 +9,6 @@ const Page = async ({ params, searchParams }) => {
     (await searchParams) || {};
   // console.log("page", page);
   const { category, page } = await params;
-  const breadcrumbs = ["Home Page", category];
   const urls = {
     categories: `/categories/?filters[slug][$eq]=${category}&populate[sub_categories][populate]=*`,
   };
@@ -92,7 +91,7 @@ const Page = async ({ params, searchParams }) => {
                   product_name
                   regular_price
                   sale_price
-                  product_image
+                  product_image1
                   product_url 
                   slug
                   shops {
@@ -126,6 +125,10 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
+  const breadcrumbs = [
+    "home page",
+    `product categories ${pageProducts?.data?.categories?.data[0]?.attributes?.name}`,
+  ];
 
   const length =
     allProducts?.data?.categories?.data[0]?.attributes?.products?.data?.length;

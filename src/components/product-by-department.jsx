@@ -29,7 +29,7 @@ const ProductByDepartment = ({ name, isFooter = false, allProducts }) => {
           }`}
         >
           <Image
-            src={item?.attributes?.product_image}
+            src={item?.attributes?.product_image1}
             alt={item?.attributes?.product_name}
             width={65}
             height={65}

@@ -14,7 +14,7 @@ const calculateDiscount = (regularPrice, salePrice) => {
 const ProductCard = ({ product, isSearch }) => {
   const {
     product_name,
-    product_image,
+    product_image1,
     slug,
     regular_price,
     sale_price,
@@ -40,7 +40,7 @@ const ProductCard = ({ product, isSearch }) => {
       <div>
         <Link href={`/pr/${slug}`} className="relative w-full">
           <Image
-            src={product_image}
+            src={product_image1}
             alt="product"
             width={500}
             height={250}
@@ -60,7 +60,7 @@ const ProductCard = ({ product, isSearch }) => {
           </Link>
           <Link
             href={`/cat/${category?.slug}/page/1`}
-            className="text-xs text-[#A5A5A5] font-lato hover:text-third py-2"
+            className="text-xs text-[#A5A5A5] font-lato hover:text-third py-2 block w-fit"
           >
             {category?.name}
           </Link>

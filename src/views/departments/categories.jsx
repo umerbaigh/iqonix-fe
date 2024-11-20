@@ -26,7 +26,7 @@ const Categories = ({ totalProducts, breadcrumbs, categories }) => {
                 {item} {"/"}
               </Link>
             ) : (
-              <p key={index} className="text-third text-sm font-lato">
+              <p key={index} className="text-third text-sm font-lato font-bold">
                 {item}
               </p>
             )
