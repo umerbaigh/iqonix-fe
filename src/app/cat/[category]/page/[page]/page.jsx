@@ -92,13 +92,15 @@ const Page = async ({ params, searchParams }) => {
                   product_name
                   regular_price
                   sale_price
-                  product_image 
+                  product_image
+                  product_url 
                   slug
                   shops {
                     data {
                       id
                       attributes {
                         name
+                        slug
                       }
                     }
                   }
@@ -107,6 +109,7 @@ const Page = async ({ params, searchParams }) => {
                       id
                       attributes {
                         name
+                        slug
                       }
                     }
                   }

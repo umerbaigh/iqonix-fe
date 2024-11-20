@@ -7,7 +7,7 @@ import { Menu, MenuHandler, MenuList, Button } from "@material-tailwind/react";
 import { SocialLinks, ProductByDepartment, SearchInput } from "@/components";
 import MobileNav from "../components/mobile_nav";
 
-const Header = ({ data, departments, shops, allProducts }) => {
+const Header = ({ data }) => {
   const [open, setOpen] = useState(false);
 
   const toggleMenu = () => {
@@ -26,13 +26,13 @@ const Header = ({ data, departments, shops, allProducts }) => {
                   <SearchInput />
                 </div>
                 <div>
-                  {departments?.map((department) => (
+                  {data?.nav_links?.map((item) => (
                     <Link
-                      key={department?.id}
-                      href={`/dp/${department?.attributes?.slug}/page/1`}
+                      key={item?.id}
+                      href={item?.link}
                       className="outline-none !text-[13px] !text-third p-4 border-b hover:!text-primary font-bold !font-lato uppercase block"
                     >
-                      {department?.attributes?.name}
+                      {item?.text}
                     </Link>
                   ))}
                 </div>
@@ -60,9 +60,9 @@ const Header = ({ data, departments, shops, allProducts }) => {
         </div>
       </div>
       <div className="hidden lg:flex gap-4 mt-4 justify-center items-center">
-        {departments?.map((department) => (
+        {data?.nav_links?.map((item) => (
           <Menu
-            key={department?.id}
+            key={item?.id}
             animate={{
               mount: { y: 0 },
               unmount: { y: 25 },
@@ -70,53 +70,28 @@ const Header = ({ data, departments, shops, allProducts }) => {
             allowHover
           >
             <MenuHandler>
-              <Link
-                href={`/dp/${department?.attributes?.slug}/page/1`}
-                className="outline-none"
-              >
+              <Link href={item?.link} className="outline-none">
                 <Button
                   variant="text"
                   className="flex items-center !text-[13px] !text-third hover:!text-primary hover:!bg-transparent focus:!outline-none font-bold !font-lato uppercase !p-0 "
                 >
-                  {department?.attributes?.name}
+                  {item?.text}
                   <div className="w-3 h-3">
                     <ChevronDown />
                   </div>
                 </Button>
               </Link>
             </MenuHandler>
-            <MenuList className="max-w-[1600px] overflow-hidden w-full px-12 pb-8 pt-12">
-              <div className="grid grid-cols-5 outline-none">
-                <div className="grid grid-rows-4 grid-flow-col gap-4 outline-none mb-8 col-span-3">
-                  {department?.attributes?.categories?.data?.map((category) => (
-                    <Link
-                      key={category?.id}
-                      href={`/cat/${category?.attributes?.slug}/page/1`}
-                      className="text-gray1 font-sm hover:text-primary w-fit"
-                    >
-                      {category?.attributes?.name}
-                    </Link>
-                  ))}
-                </div>
-                <div className="col-span-2">
-                  <ProductByDepartment
-                    name={department?.attributes?.name}
-                    allProducts={allProducts}
-                  />
-                </div>
-              </div>
-              <div className="flex justify-between items-center gap-4 outline-none max-w-[1200px] mx-auto">
-                {shops?.map((shop) => (
-                  <div key={shop?.id}>
-                    <Link href={`/shop/${shop?.attributes?.slug}/page/1`}>
-                      <Image
-                        src={shop?.attributes.image?.data?.attributes?.url}
-                        width={200}
-                        height={60}
-                        alt="shop"
-                      />
-                    </Link>
-                  </div>
+            <MenuList className="max-w-[1600px] overflow-hidden w-full px-4 py-8">
+              <div className="grid grid-rows-4 grid-flow-col gap-y-6 gap-x-12 outline-none mx-auto w-fit">
+                {item?.dropdown_links?.map((category) => (
+                  <Link
+                    key={category?.id}
+                    href={category?.link}
+                    className="text-gray1 font-sm hover:text-primary w-fit"
+                  >
+                    {category?.text}
+                  </Link>
                 ))}
               </div>
             </MenuList>

@@ -81,7 +81,7 @@ const ProductDetail = ({ product }) => {
             {product?.sale_price} €
           </p>
 
-          <Link href={product?.product_url}>
+          <Link href={product?.product_url} target="_blank">
             <button className="relative w-full bg-[#536162] hover:bg-third transition-all ease-in-out duration-300 text-white text-[13px] font-lato py-5 group font-semibold rounded-md overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 transform group-hover:-translate-y-full opacity-100 group-hover:opacity-0 uppercase">
                 TO THE SHOP

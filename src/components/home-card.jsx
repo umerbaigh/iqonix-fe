@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 const HomeCard = ({ data }) => {
   return (
@@ -23,9 +24,12 @@ const HomeCard = ({ data }) => {
               {data?.description}
             </p>
           </div>
-          <button className="text-[13px] font-poppins text-white bg-black uppercase font-semibold py-2 px-3 flex justify-end ml-auto opacity-0 transform translate-y-10 transition-transform duration-500 ease-in-out group-hover:opacity-100 group-hover:translate-y-0">
+          <Link
+            href={data?.link}
+            className="text-[13px] font-poppins text-white bg-black uppercase font-semibold py-2 px-3 flex justify-end ml-auto opacity-0 transform translate-y-10 transition-transform duration-500 ease-in-out group-hover:opacity-100 group-hover:translate-y-0"
+          >
             {data?.btn_txt}
-          </button>
+          </Link>
         </div>
       </div>
       {/* <div className="flex justify-center items-center h-[200px] w-[200px] bg-cover bg-center">

@@ -14,74 +14,28 @@ import {
 const Page = async () => {
   const urls = {
     hero: `/home-hero-section/?populate=*`,
-    department: `/departments/?populate=image&populate=icon&sort=id`,
+    shopByCategory: `/shop-by-category/?populate[category_links][populate]=*`,
+    mustHaveProduct: `/must-have-product/?populate[search_words][populate]=*`,
     card: `/home-product-cards/?populate=*`,
     about: `/home-about/?populate=*`,
     shop: `/shops/?populate=*`,
   };
-  const [hero, department, card, about, shop] = await Promise.all([
-    getServerSideData(urls.hero),
-    getServerSideData(urls.department, true),
-    getServerSideData(urls.card, true),
-    getServerSideData(urls.about),
-    getServerSideData(urls.shop, true),
-  ]);
-  const query = `
-  query {
-    departments {
-      data {
-        id
-        attributes {
-          name
-          icon {
-            data {
-              attributes {
-                url
-                name
-              }
-            }
-          }
-          products(pagination: { limit: 5 }) {
-            data {
-              id
-              attributes {
-                product_name
-                regular_price
-                sale_price
-                product_image
-                slug
-                shops {
-                  data {
-                    id
-                    attributes {
-                      name
-                    }
-                  }
-                }
-                categories {
-                  data {
-                    id
-                    attributes {
-                      name
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-`;
+  const [hero, shopByCategory, mustHaveProduct, card, about, shop] =
+    await Promise.all([
+      getServerSideData(urls.hero),
+      getServerSideData(urls.shopByCategory),
+      getServerSideData(urls.mustHaveProduct),
+      getServerSideData(urls.card, true),
+      getServerSideData(urls.about),
+      getServerSideData(urls.shop, true),
+    ]);
 
-  const departmentsGraphql = await getGraphql(query, true);
   return (
     <div>
       <Layout>
         <Hero data={hero} />
-        <DepartmentSlider data={department?.data} />
-        <Products data={departmentsGraphql?.data?.departments?.data} />
+        <DepartmentSlider data={shopByCategory} />
+        <Products data={mustHaveProduct} />
         <ProductCards data={card?.data} />
         <AboutUs data={about} />
         <Shop data={shop?.data} />

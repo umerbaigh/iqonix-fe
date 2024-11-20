@@ -11,20 +11,34 @@ const calculateDiscount = (regularPrice, salePrice) => {
   return 0;
 };
 
-const ProductCard = ({ product }) => {
-  const { product_name, product_image, slug, regular_price, sale_price } =
-    product?.attributes || {};
+const ProductCard = ({ product, isSearch }) => {
+  const {
+    product_name,
+    product_image,
+    slug,
+    regular_price,
+    sale_price,
+    product_url,
+    categories,
+    shops,
+  } = isSearch ? product || {} : product?.attributes || {};
+
+  // Access category properly
+  const category = Array.isArray(categories)
+    ? categories?.[0]
+    : categories?.data?.[0]?.attributes;
+
+  // Access shop properly
+  const shop = Array.isArray(shops) ? shops?.[0] : shops?.data?.[0]?.attributes;
+
   const discount = regular_price
     ? calculateDiscount(regular_price, sale_price)
     : 0;
 
   return (
-    <Link
-      href={`/pr/${slug}`}
-      className="border rounded-md shadow-md p-2 h-full flex flex-col justify-between"
-    >
+    <div className="border rounded-md shadow-md p-2 h-full flex flex-col justify-between">
       <div>
-        <div className="relative w-full">
+        <Link href={`/pr/${slug}`} className="relative w-full">
           <Image
             src={product_image}
             alt="product"
@@ -37,17 +51,25 @@ const ProductCard = ({ product }) => {
               -{discount}%
             </span>
           )}
-        </div>
+        </Link>
         <div className="mt-3">
-          <h3 className="text-sm font-poppins text-third font-medium">
-            {product_name}
-          </h3>
-          <p className="text-xs text-[#A5A5A5] font-lato hover:text-third py-2">
-            {product?.attributes?.categories?.data[0]?.attributes?.name}
-          </p>
-          <p className="text-xs text-[#A5A5A5] font-lato hover:text-third">
-            {product?.attributes?.shops?.data[0]?.attributes?.name}
-          </p>
+          <Link href={`/pr/${slug}`} className="w-fit block">
+            <h3 className="text-sm font-poppins text-third font-medium">
+              {product_name}
+            </h3>
+          </Link>
+          <Link
+            href={`/cat/${category?.slug}/page/1`}
+            className="text-xs text-[#A5A5A5] font-lato hover:text-third py-2"
+          >
+            {category?.name}
+          </Link>
+          <Link
+            href={`/shop/${shop?.slug}/page/1`}
+            className="text-xs text-[#A5A5A5] font-lato hover:text-third"
+          >
+            {shop?.name}
+          </Link>
           <p className="text-primary text-sm font-semibold font-lato py-2">
             {regular_price && (
               <span className="text-[#bbb] text-[13px] font-normal font-lato line-through mr-1">
@@ -58,7 +80,11 @@ const ProductCard = ({ product }) => {
           </p>
         </div>
       </div>
-      <button className="relative w-full bg-[#536162] hover:bg-third transition-all ease-in-out duration-300 text-white text-[13px] font-lato py-5 group font-semibold rounded-md overflow-hidden">
+      <Link
+        href={product_url}
+        target="_blank"
+        className="relative w-full bg-[#536162] hover:bg-third transition-all ease-in-out duration-300 text-white text-[13px] font-lato py-5 group font-semibold rounded-md overflow-hidden"
+      >
         <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 transform group-hover:-translate-y-full opacity-100 group-hover:opacity-0 uppercase">
           TO THE SHOP
         </div>
@@ -67,8 +93,8 @@ const ProductCard = ({ product }) => {
             <Navigate />
           </div>
         </div>
-      </button>
-    </Link>
+      </Link>
+    </div>
   );
 };
 

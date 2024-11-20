@@ -9,7 +9,6 @@ const Page = async ({ params }) => {
     product: `/products/?filters[slug][$eq]=${slug}&populate[shops][populate]=*&populate[brand][populate]=*`,
   };
   const [product] = await Promise.all([getServerSideData(urls.product, true)]);
-  console.log(product?.data?.[0]?.attributes);
   return (
     <div>
       <Layout>

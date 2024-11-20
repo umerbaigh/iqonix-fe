@@ -17,8 +17,8 @@ const SearchInput = () => {
         `/custom-products?search_word=${input}`,
         true
       );
-      console.log(products);
-      setProduct(products);
+      // console.log(products);
+      setProduct(products?.data);
       setLoading(false);
     }, 1000),
     [] // Dependencies for debounce
@@ -95,7 +95,7 @@ const SearchInput = () => {
           <Search />
         )}
       </div>
-      {search && product.length !== 0 && (
+      {search && product?.length !== 0 && (
         <div className="absolute left-0 right-0 max-h-[60vh] grid grid-cols-2 overflow-y-auto filters top-full bg-white border border-gray-300 rounded-b-md shadow-md mt-1 z-10">
           {product?.map((item, index) => (
             <Link
@@ -132,7 +132,7 @@ const SearchInput = () => {
           ))}
         </div>
       )}
-      {search && product.length === 0 && (
+      {search && product?.length === 0 && (
         <ul className="absolute left-0 right-0 top-full bg-white border border-gray-300 rounded-b-md shadow-md mt-1 z-10">
           <li className="py-2 px-4">Not found</li>
         </ul>
