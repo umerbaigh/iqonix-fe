@@ -18,7 +18,6 @@ const Page = async ({ params, searchParams }) => {
   } = (await searchParams) || {};
   // console.log("page", page);
   const { brand } = await params;
-  const breadcrumbs = ["Home Page", brand];
   const urls = {
     brands: `/brands/?filters[slug][$eq]=${brand}`,
   };
@@ -135,6 +134,13 @@ const Page = async ({ params, searchParams }) => {
   ]);
   // console.log("All Products", allProducts);
   // console.log("Page Products", pageProducts);
+
+  const breadcrumbs = [
+    { title: "home page", link: "/" },
+    {
+      title: `product brands ${pageProducts?.data?.brands?.data[0]?.attributes?.name}`,
+    },
+  ];
 
   const length =
     allProducts?.data?.brands?.data[0]?.attributes?.products?.data?.length;

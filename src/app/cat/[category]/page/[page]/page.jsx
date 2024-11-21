@@ -9,13 +9,71 @@ const Page = async ({ params, searchParams }) => {
     (await searchParams) || {};
   // console.log("page", page);
   const { category, page } = await params;
-  const urls = {
-    categories: `/categories/?filters[slug][$eq]=${category}&populate[sub_categories][populate]=*`,
+  const fetchCategoryWithParents = async (slug) => {
+    const breadcrumbs = [];
+    let currentSlug = slug;
+
+    // Fetch category and parents recursively using GraphQL
+    while (currentSlug) {
+      const query = `
+      query {
+        categories(filters: { slug: { eq: "${currentSlug}" } }) {
+          data {
+            id
+            attributes {
+              name
+              slug
+              parent {
+                data {
+                  id
+                  attributes {
+                    name
+                    slug
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+
+      const response = await getGraphql(query, true); // Replace REST API call with GraphQL call
+      const categoryData = response?.data?.categories?.data?.[0]?.attributes;
+
+      if (!categoryData) break; // Exit loop if no category data found
+
+      // Add current category to breadcrumbs
+      breadcrumbs.unshift({
+        title: categoryData.name,
+        link: `/cat/${categoryData.slug}/page/1`,
+      });
+
+      // Set currentSlug to parent slug for the next iteration
+      currentSlug = categoryData?.parent?.data?.attributes?.slug || null;
+    }
+
+    // Add the homepage breadcrumb
+    breadcrumbs.unshift({
+      title: "home page",
+      link: "/",
+    });
+
+    return breadcrumbs;
   };
+
+  // Usage example
+  const breadcrumbs = await fetchCategoryWithParents(category);
+  // console.log(breadcrumbs);
+
+  const urls = {
+    categories: `/categories/?filters[slug][$eq]=${category}&populate[sub_categories][populate]=*&populate[parent][populate]=*`,
+  };
+
   const [categories] = await Promise.all([
     getServerSideData(urls.categories, true),
   ]);
-  // console.log(categories?.data[0]?.attributes);
+
   let sortOption = "";
   if (order === "date") {
     sortOption = 'sort: "createdAt:desc"';
@@ -125,10 +183,6 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
-  const breadcrumbs = [
-    "home page",
-    `product categories ${pageProducts?.data?.categories?.data[0]?.attributes?.name}`,
-  ];
 
   const length =
     allProducts?.data?.categories?.data[0]?.attributes?.products?.data?.length;

@@ -131,9 +131,15 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
+  // const breadcrumbs = [
+  //   "home page",
+  //   `product shops ${pageProducts?.data?.shops?.data[0]?.attributes?.name}`,
+  // ];
   const breadcrumbs = [
-    "home page",
-    `product shops ${pageProducts?.data?.shops?.data[0]?.attributes?.name}`,
+    { title: "home page", link: "/" },
+    {
+      title: `product shops ${pageProducts?.data?.shops?.data[0]?.attributes?.name}`,
+    },
   ];
 
   const length =

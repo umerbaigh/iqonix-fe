@@ -1,12 +1,11 @@
 "use client";
-import { useSearchParams, useParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import Link from "next/link";
 
 const ITEMS_PER_PAGE = 2;
 
 const Categories = ({ totalProducts, breadcrumbs, categories }) => {
   const params = useParams();
-  const searchParams = useSearchParams();
 
   const page = parseInt(params.page || 1);
 
@@ -19,15 +18,15 @@ const Categories = ({ totalProducts, breadcrumbs, categories }) => {
           {breadcrumbs?.map((item, index) =>
             index !== breadcrumbs?.length - 1 ? (
               <Link
-                href={index === 0 ? "/" : item.toLowerCase()}
+                href={item?.link}
                 key={index}
-                className="text-[#767676] text-sm font-lato"
+                className="text-[#767676] text-sm font-lato hover:text-third"
               >
-                {item} {"/"}
+                {item?.title} {"/"}
               </Link>
             ) : (
               <p key={index} className="text-third text-sm font-lato font-bold">
-                {item}
+                {item?.title}
               </p>
             )
           )}

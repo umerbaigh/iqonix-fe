@@ -134,8 +134,10 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query2, true),
   ]);
   const breadcrumbs = [
-    "home page",
-    `product departments ${pageProducts?.data?.departments?.data[0]?.attributes?.name}`,
+    { title: "home page", link: "/" },
+    {
+      title: `product departments ${pageProducts?.data?.departments?.data[0]?.attributes?.name}`,
+    },
   ];
 
   const length =
