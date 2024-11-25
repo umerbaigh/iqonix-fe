@@ -7,8 +7,9 @@ import { Categories, Products } from "@/views/departments";
 const Page = async ({ params, searchParams }) => {
   const { order, color, delivery, width, height, depth, min, max } =
     (await searchParams) || {};
+  const page = 1;
   // console.log("page", page);
-  const { brand, page } = await params;
+  const { brand } = await params;
   const urls = {
     brands: `/brands/?filters[slug][$eq]=${brand}`,
   };

@@ -300,12 +300,12 @@ const Products = ({
             totalProducts > 0 ? "w-[100%] lg:w-[80%]" : "w-[100%]"
           }`}
         >
-          <div className="flex flex-col lg:flex-row justify-between gap-y-8 lg:items-center mb-4 p-8 bg-[#f8f8f8] w-full">
+          <div className="flex flex-col lg:flex-row justify-between gap-y-8 lg:items-center mb-4 px-4 sm:px-8 py-8 bg-[#f8f8f8] w-full">
             <h2 className="text-2xl font-poppins font-semibold text-[#242424]">
               {departmentName}
             </h2>
             {totalProducts > 0 && (
-              <div className="flex justify-between items-center w-full lg:w-fit">
+              <div className="flex justify-between flex-wrap gap-x-8 gap-y-6 items-center w-full lg:w-fit">
                 <div className="block lg:hidden">
                   <MobileNav
                     open={open}
@@ -385,7 +385,7 @@ const Products = ({
             </div>
           ) : totalProducts > 0 ? (
             <div>
-              <div className="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 mb-10">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 mb-10">
                 {products?.map((product) => (
                   <ProductCard product={product} key={product.id} />
                 ))}

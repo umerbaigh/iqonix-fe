@@ -8,11 +8,14 @@ const Page = async ({ params, searchParams }) => {
   const { order, color, delivery, width, height, depth, min, max } =
     (await searchParams) || {};
   // console.log("page", page);
-  const { brand, page } = await params;
+  const page = 1;
+  const { department } = await params;
   const urls = {
-    brands: `/brands/?filters[slug][$eq]=${brand}`,
+    categories: `/departments/?filters[slug][$eq]=${department}&populate[categories][populate]=*`,
   };
-  const [brands] = await Promise.all([getServerSideData(urls.brands, true)]);
+  const [categories] = await Promise.all([
+    getServerSideData(urls.categories, true),
+  ]);
   // console.log(categories?.data[0]?.attributes);
   let sortOption = "";
   if (order === "date") {
@@ -51,7 +54,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query1 = `
     query {
-      brands(filters: { slug: { eq: "${brand}" } }) {
+      departments(filters: { slug: { eq: "${department}" } }) {
         data {
           id
           attributes {
@@ -66,6 +69,14 @@ const Page = async ({ params, searchParams }) => {
                   width
                   height
                   depth
+                  shops {
+                    data {
+                      id
+                      attributes {
+                        name
+                      }
+                    }
+                  }
                 }
               }
             }
@@ -77,7 +88,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query2 = `
     query {
-      brands(filters: { slug: { eq: "${brand}" } }) {
+      departments(filters: { slug: { eq: "${department}" } }) {
         data {
           id
           attributes {
@@ -123,37 +134,35 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
-  // console.log("All Products", allProducts);
-  // console.log("Page Products", pageProducts);
-
   const breadcrumbs = [
     { title: "home page", link: "/" },
     {
-      title: `product brands ${pageProducts?.data?.brands?.data[0]?.attributes?.name}`,
+      title: `product departments ${pageProducts?.data?.departments?.data[0]?.attributes?.name}`,
     },
   ];
 
   const length =
-    allProducts?.data?.brands?.data[0]?.attributes?.products?.data?.length;
-
+    allProducts?.data?.departments?.data[0]?.attributes?.products?.data?.length;
   return (
     <div>
       <Layout>
         <Categories
           totalProducts={length}
           breadcrumbs={breadcrumbs}
-          // categories={brands?.data[0]?.attributes?.categories?.data}
+          categories={categories?.data[0]?.attributes?.categories?.data}
         />
         <Products
-          departmentName={pageProducts?.data?.brands?.data[0]?.attributes?.name}
+          departmentName={
+            pageProducts?.data?.departments?.data[0]?.attributes?.name
+          }
           allProducts={
-            allProducts?.data?.brands?.data[0]?.attributes?.products?.data
+            allProducts?.data?.departments?.data[0]?.attributes?.products?.data
           }
           products={
-            pageProducts?.data?.brands?.data[0]?.attributes?.products?.data
+            pageProducts?.data?.departments?.data[0]?.attributes?.products?.data
           }
           totalProducts={length}
-          description={brands?.data[0]?.attributes?.description}
+          description={categories?.data[0]?.attributes?.description}
         />
       </Layout>
     </div>

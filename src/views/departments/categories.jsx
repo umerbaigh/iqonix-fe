@@ -45,7 +45,7 @@ const Categories = ({ totalProducts, breadcrumbs, categories }) => {
         <div className="flex gap-x-4 gap-y-4 sm:gap-x-6 flex-wrap items-center justify-center px-4 py-4 mt-4 border border-[#7A7A7A] w-full">
           {categories?.map((category) => (
             <Link
-              href={`/cat/${category?.attributes?.slug}/page/1`}
+              href={`/cat/${category?.attributes?.slug}`}
               key={category.id}
               className="text-sm text-third font-lato uppercase font-semibold hover:text-primary"
             >

@@ -164,7 +164,7 @@ const ProductDetail = ({ product }) => {
           )}
           {product?.shops?.data[0]?.attributes?.name && (
             <Link
-              href={`/shop/${product?.shops?.data[0]?.attributes?.slug}/page/1`}
+              href={`/shop/${product?.shops?.data[0]?.attributes?.slug}`}
               className="w-full flex items-center justify-between pb-4 hover:text-primary"
             >
               <p>Shop</p>
@@ -173,7 +173,7 @@ const ProductDetail = ({ product }) => {
           )}
           {product?.brand?.data?.attributes?.name && (
             <Link
-              href={`/br/${product?.brand?.data?.attributes?.slug}/page/1`}
+              href={`/br/${product?.brand?.data?.attributes?.slug}`}
               className="w-full flex items-center justify-between pb-4 border-b border-[#0000001c]"
             >
               <p>Brand</p>

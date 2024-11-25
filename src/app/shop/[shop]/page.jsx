@@ -1,4 +1,3 @@
-// import { BASE_URL, isLocal } from "@/utils/axios_instance";
 import { getServerSideData } from "@/utils/get-api";
 import { getGraphql } from "@/utils/get-graphql-api";
 import Layout from "@/layout/page";
@@ -8,12 +7,13 @@ const Page = async ({ params, searchParams }) => {
   const { order, color, delivery, width, height, depth, min, max } =
     (await searchParams) || {};
   // console.log("page", page);
-  const { brand, page } = await params;
+  const page = 1;
+  const { shop } = await params;
   const urls = {
-    brands: `/brands/?filters[slug][$eq]=${brand}`,
+    shops: `/shops/?filters[slug][$eq]=${shop}&populate[categories][populate]=*`,
   };
-  const [brands] = await Promise.all([getServerSideData(urls.brands, true)]);
-  // console.log(categories?.data[0]?.attributes);
+  const [shops] = await Promise.all([getServerSideData(urls.shops, true)]);
+  // console.log(shops?.data[0]?.attributes);
   let sortOption = "";
   if (order === "date") {
     sortOption = 'sort: "createdAt:desc"';
@@ -51,7 +51,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query1 = `
     query {
-      brands(filters: { slug: { eq: "${brand}" } }) {
+      shops(filters: { slug: { eq: "${shop}" } }) {
         data {
           id
           attributes {
@@ -77,7 +77,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query2 = `
     query {
-      brands(filters: { slug: { eq: "${brand}" } }) {
+      shops(filters: { slug: { eq: "${shop}" } }) {
         data {
           id
           attributes {
@@ -123,37 +123,33 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
-  // console.log("All Products", allProducts);
-  // console.log("Page Products", pageProducts);
-
+  // const breadcrumbs = [
+  //   "home page",
+  //   `product shops ${pageProducts?.data?.shops?.data[0]?.attributes?.name}`,
+  // ];
   const breadcrumbs = [
     { title: "home page", link: "/" },
     {
-      title: `product brands ${pageProducts?.data?.brands?.data[0]?.attributes?.name}`,
+      title: `product shops ${pageProducts?.data?.shops?.data[0]?.attributes?.name}`,
     },
   ];
 
   const length =
-    allProducts?.data?.brands?.data[0]?.attributes?.products?.data?.length;
-
+    allProducts?.data?.shops?.data[0]?.attributes?.products?.data?.length;
   return (
     <div>
       <Layout>
-        <Categories
-          totalProducts={length}
-          breadcrumbs={breadcrumbs}
-          // categories={brands?.data[0]?.attributes?.categories?.data}
-        />
+        <Categories totalProducts={length} breadcrumbs={breadcrumbs} />
         <Products
-          departmentName={pageProducts?.data?.brands?.data[0]?.attributes?.name}
+          departmentName={pageProducts?.data?.shops?.data[0]?.attributes?.name}
           allProducts={
-            allProducts?.data?.brands?.data[0]?.attributes?.products?.data
+            allProducts?.data?.shops?.data[0]?.attributes?.products?.data
           }
           products={
-            pageProducts?.data?.brands?.data[0]?.attributes?.products?.data
+            pageProducts?.data?.shops?.data[0]?.attributes?.products?.data
           }
           totalProducts={length}
-          description={brands?.data[0]?.attributes?.description}
+          description={shops?.data[0]?.attributes?.description}
         />
       </Layout>
     </div>

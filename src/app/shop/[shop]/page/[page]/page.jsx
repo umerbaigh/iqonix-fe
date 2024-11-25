@@ -4,19 +4,10 @@ import Layout from "@/layout/page";
 import { Categories, Products } from "@/views/departments";
 
 const Page = async ({ params, searchParams }) => {
-  const {
-    page = 1,
-    order,
-    color,
-    delivery,
-    width,
-    height,
-    depth,
-    min,
-    max,
-  } = (await searchParams) || {};
+  const { order, color, delivery, width, height, depth, min, max } =
+    (await searchParams) || {};
   // console.log("page", page);
-  const { shop } = await params;
+  const { shop, page } = await params;
   const urls = {
     shops: `/shops/?filters[slug][$eq]=${shop}&populate[categories][populate]=*`,
   };

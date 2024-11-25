@@ -46,7 +46,7 @@ const Page = async ({ params, searchParams }) => {
       // Add current category to breadcrumbs
       breadcrumbs.unshift({
         title: categoryData.name,
-        link: `/cat/${categoryData.slug}/page/1`,
+        link: `/cat/${categoryData.slug}`,
       });
 
       // Set currentSlug to parent slug for the next iteration
@@ -67,12 +67,21 @@ const Page = async ({ params, searchParams }) => {
   // console.log(breadcrumbs);
 
   const urls = {
-    categories: `/categories/?filters[slug][$eq]=${category}&populate[sub_categories][populate]=*&populate[parent][populate]=*`,
+    categories: `/categories/?filters[slug][$eq]=${category}&populate[parent][populate]=*`,
   };
 
   const [categories] = await Promise.all([
     getServerSideData(urls.categories, true),
   ]);
+  // console.log(categories);
+
+  const [sub_categories] = await Promise.all([
+    getServerSideData(
+      `/categories/?filters[parent][$eq]=${categories?.data?.[0]?.id}`,
+      true
+    ),
+  ]);
+  // console.log(sub_categories);
 
   let sortOption = "";
   if (order === "date") {
@@ -193,7 +202,7 @@ const Page = async ({ params, searchParams }) => {
         <Categories
           totalProducts={length}
           breadcrumbs={breadcrumbs}
-          categories={categories?.data[0]?.attributes?.sub_categories?.data}
+          categories={sub_categories?.data}
         />
         <Products
           departmentName={

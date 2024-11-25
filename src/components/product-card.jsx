@@ -36,7 +36,7 @@ const ProductCard = ({ product, isSearch }) => {
     : 0;
 
   return (
-    <div className="border rounded-md shadow-md p-2 h-full flex flex-col justify-between">
+    <div className="border rounded-md shadow-md h-full flex flex-col justify-between">
       <div>
         <Link href={`/pr/${slug}`} className="relative w-full">
           <Image
@@ -52,24 +52,28 @@ const ProductCard = ({ product, isSearch }) => {
             </span>
           )}
         </Link>
-        <div className="mt-3">
+        <div className="mt-3 mx-2">
           <Link href={`/pr/${slug}`} className="w-fit block">
             <h3 className="text-sm font-poppins text-third font-medium">
               {product_name}
             </h3>
           </Link>
-          <Link
-            href={`/cat/${category?.slug}/page/1`}
-            className="text-xs text-[#A5A5A5] font-lato hover:text-third py-2 block w-fit"
-          >
-            {category?.name}
-          </Link>
-          <Link
-            href={`/shop/${shop?.slug}/page/1`}
-            className="text-xs text-[#A5A5A5] font-lato hover:text-third"
-          >
-            {shop?.name}
-          </Link>
+          {category && (
+            <Link
+              href={`/cat/${category?.slug}`}
+              className="text-xs text-[#A5A5A5] font-lato hover:text-third py-2 block w-fit"
+            >
+              {category?.name}
+            </Link>
+          )}
+          {shop && (
+            <Link
+              href={`/shop/${shop?.slug}`}
+              className="text-xs text-[#A5A5A5] font-lato hover:text-third"
+            >
+              {shop?.name}
+            </Link>
+          )}
           <p className="text-primary text-sm font-semibold font-lato py-2">
             {regular_price && (
               <span className="text-[#bbb] text-[13px] font-normal font-lato line-through mr-1">
@@ -83,7 +87,7 @@ const ProductCard = ({ product, isSearch }) => {
       <Link
         href={product_url}
         target="_blank"
-        className="relative w-full bg-[#536162] hover:bg-third transition-all ease-in-out duration-300 text-white text-[13px] font-lato py-5 group font-semibold rounded-md overflow-hidden"
+        className="relative w-[92%] bg-[#536162] hover:bg-third transition-all ease-in-out duration-300 text-white text-[13px] font-lato py-5 block mx-auto my-2 group font-semibold rounded-md overflow-hidden"
       >
         <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 transform group-hover:-translate-y-full opacity-100 group-hover:opacity-0 uppercase">
           TO THE SHOP

@@ -2,11 +2,9 @@ import { HomeCard } from "@/components";
 
 const ProductCards = ({ data }) => {
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 my-16 max-w-[1600px] mx-auto px-4 sm:px-8">
+    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 my-16 w-full max-w-[1600px] mx-auto px-4 sm:px-8">
       {data?.map((item, index) => (
-        <div key={index} className="h-full">
-          <HomeCard data={item?.attributes} />
-        </div>
+        <HomeCard key={index} data={item?.attributes} />
       ))}
     </div>
   );

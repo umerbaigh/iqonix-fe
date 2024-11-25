@@ -8,12 +8,82 @@ const Page = async ({ params, searchParams }) => {
   const { order, color, delivery, width, height, depth, min, max } =
     (await searchParams) || {};
   // console.log("page", page);
-  const { brand, page } = await params;
-  const urls = {
-    brands: `/brands/?filters[slug][$eq]=${brand}`,
+  const page = 1;
+  const { category } = await params;
+  const fetchCategoryWithParents = async (slug) => {
+    const breadcrumbs = [];
+    let currentSlug = slug;
+
+    // Fetch category and parents recursively using GraphQL
+    while (currentSlug) {
+      const query = `
+      query {
+        categories(filters: { slug: { eq: "${currentSlug}" } }) {
+          data {
+            id
+            attributes {
+              name
+              slug
+              parent {
+                data {
+                  id
+                  attributes {
+                    name
+                    slug
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    `;
+
+      const response = await getGraphql(query, true); // Replace REST API call with GraphQL call
+      const categoryData = response?.data?.categories?.data?.[0]?.attributes;
+
+      if (!categoryData) break; // Exit loop if no category data found
+
+      // Add current category to breadcrumbs
+      breadcrumbs.unshift({
+        title: categoryData.name,
+        link: `/cat/${categoryData.slug}`,
+      });
+
+      // Set currentSlug to parent slug for the next iteration
+      currentSlug = categoryData?.parent?.data?.attributes?.slug || null;
+    }
+
+    // Add the homepage breadcrumb
+    breadcrumbs.unshift({
+      title: "home page",
+      link: "/",
+    });
+
+    return breadcrumbs;
   };
-  const [brands] = await Promise.all([getServerSideData(urls.brands, true)]);
-  // console.log(categories?.data[0]?.attributes);
+
+  // Usage example
+  const breadcrumbs = await fetchCategoryWithParents(category);
+  // console.log(breadcrumbs);
+
+  const urls = {
+    categories: `/categories/?filters[slug][$eq]=${category}&populate[parent][populate]=*`,
+  };
+
+  const [categories] = await Promise.all([
+    getServerSideData(urls.categories, true),
+  ]);
+  // console.log(categories);
+
+  const [sub_categories] = await Promise.all([
+    getServerSideData(
+      `/categories/?filters[parent][$eq]=${categories?.data?.[0]?.id}`,
+      true
+    ),
+  ]);
+  // console.log(sub_categories);
+
   let sortOption = "";
   if (order === "date") {
     sortOption = 'sort: "createdAt:desc"';
@@ -51,7 +121,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query1 = `
     query {
-      brands(filters: { slug: { eq: "${brand}" } }) {
+      categories(filters: { slug: { eq: "${category}" } }) {
         data {
           id
           attributes {
@@ -77,7 +147,7 @@ const Page = async ({ params, searchParams }) => {
 
   const query2 = `
     query {
-      brands(filters: { slug: { eq: "${brand}" } }) {
+      categories(filters: { slug: { eq: "${category}" } }) {
         data {
           id
           attributes {
@@ -123,18 +193,9 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
-  // console.log("All Products", allProducts);
-  // console.log("Page Products", pageProducts);
-
-  const breadcrumbs = [
-    { title: "home page", link: "/" },
-    {
-      title: `product brands ${pageProducts?.data?.brands?.data[0]?.attributes?.name}`,
-    },
-  ];
 
   const length =
-    allProducts?.data?.brands?.data[0]?.attributes?.products?.data?.length;
+    allProducts?.data?.categories?.data[0]?.attributes?.products?.data?.length;
 
   return (
     <div>
@@ -142,18 +203,20 @@ const Page = async ({ params, searchParams }) => {
         <Categories
           totalProducts={length}
           breadcrumbs={breadcrumbs}
-          // categories={brands?.data[0]?.attributes?.categories?.data}
+          categories={sub_categories?.data}
         />
         <Products
-          departmentName={pageProducts?.data?.brands?.data[0]?.attributes?.name}
+          departmentName={
+            pageProducts?.data?.categories?.data[0]?.attributes?.name
+          }
           allProducts={
-            allProducts?.data?.brands?.data[0]?.attributes?.products?.data
+            allProducts?.data?.categories?.data[0]?.attributes?.products?.data
           }
           products={
-            pageProducts?.data?.brands?.data[0]?.attributes?.products?.data
+            pageProducts?.data?.categories?.data[0]?.attributes?.products?.data
           }
           totalProducts={length}
-          description={brands?.data[0]?.attributes?.description}
+          description={categories?.data[0]?.attributes?.description}
         />
       </Layout>
     </div>

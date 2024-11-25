@@ -60,43 +60,56 @@ const Header = ({ data }) => {
         </div>
       </div>
       <div className="hidden lg:flex gap-4 mt-4 justify-center items-center">
-        {data?.nav_links?.map((item) => (
-          <Menu
-            key={item?.id}
-            animate={{
-              mount: { y: 0 },
-              unmount: { y: 25 },
-            }}
-            allowHover
-          >
-            <MenuHandler>
-              <Link href={item?.link} className="outline-none">
-                <Button
-                  variant="text"
-                  className="flex items-center !text-[13px] !text-third hover:!text-primary hover:!bg-transparent focus:!outline-none font-bold !font-lato uppercase !p-0 "
-                >
-                  {item?.text}
-                  <div className="w-3 h-3">
-                    <ChevronDown />
-                  </div>
-                </Button>
-              </Link>
-            </MenuHandler>
-            <MenuList className="max-w-[1600px] overflow-hidden w-full px-4 py-8">
-              <div className="grid grid-rows-4 grid-flow-col gap-y-6 gap-x-12 outline-none mx-auto w-fit">
-                {item?.dropdown_links?.map((category) => (
-                  <Link
-                    key={category?.id}
-                    href={category?.link}
-                    className="text-gray1 font-sm hover:text-primary w-fit"
+        {data?.nav_links?.map((item) =>
+          item?.dropdown_links?.length > 0 ? (
+            <Menu
+              key={item?.id}
+              animate={{
+                mount: { y: 0 },
+                unmount: { y: 25 },
+              }}
+              allowHover
+            >
+              <MenuHandler>
+                <Link href={item?.link} className="outline-none">
+                  <Button
+                    variant="text"
+                    className="flex items-center !text-[13px] !text-third hover:!text-primary hover:!bg-transparent focus:!outline-none font-bold !font-lato uppercase !p-0 "
                   >
-                    {category?.text}
-                  </Link>
-                ))}
+                    {item?.text}
+                    <div className="w-3 h-3">
+                      <ChevronDown />
+                    </div>
+                  </Button>
+                </Link>
+              </MenuHandler>
+              <MenuList className="max-w-[1600px] overflow-hidden w-full px-4 py-8">
+                <div className="grid grid-cols-4 gap-y-6 gap-x-12 outline-none mx-auto w-fit">
+                  {item?.dropdown_links?.map((category) => (
+                    <Link
+                      key={category?.id}
+                      href={category?.link}
+                      className="text-gray1 font-sm hover:text-primary w-fit"
+                    >
+                      {category?.text}
+                    </Link>
+                  ))}
+                </div>
+              </MenuList>
+            </Menu>
+          ) : (
+            <Link
+              key={item?.id}
+              href={item?.link}
+              className="flex items-center !text-[13px] !text-third hover:!text-primary hover:!bg-transparent focus:!outline-none font-bold !font-lato uppercase !p-0 "
+            >
+              {item?.text}
+              <div className="w-3 h-3">
+                <ChevronDown />
               </div>
-            </MenuList>
-          </Menu>
-        ))}
+            </Link>
+          )
+        )}
       </div>
     </div>
   );

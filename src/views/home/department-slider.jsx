@@ -58,7 +58,7 @@ const DepartmentSlider = ({ data }) => {
                   />
                   <div
                     // onClick={() =>
-                    //   handleClick(`/dp/${category?.attributes?.slug}/page/1`)
+                    //   handleClick(`/dp/${category?.attributes?.slug}`)
                     // }
                     className="absolute inset-0 hover:bg-black hover:bg-opacity-30 flex flex-col items-center justify-center transition duration-500 ease-in-out"
                   >
