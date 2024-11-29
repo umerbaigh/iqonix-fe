@@ -14,7 +14,7 @@ const SearchInput = () => {
   const debouncedFilterProducts = useCallback(
     debounce(async (input) => {
       const products = await getServerSideData(
-        `/custom-products?search_word=${input}`,
+        `/custom-products?search_word=${input}&page=1&pageSize=12`,
         true
       );
       // console.log(products);
@@ -96,40 +96,48 @@ const SearchInput = () => {
         )}
       </div>
       {search && product?.length !== 0 && (
-        <div className="absolute left-0 right-0 max-h-[60vh] grid grid-cols-2 overflow-y-auto filters top-full bg-white border border-gray-300 rounded-b-md shadow-md mt-1 z-10">
-          {product?.map((item, index) => (
-            <Link
-              href={item?.slug}
-              key={index}
-              className={`flex p-3 gap-3 hover:bg-gray-100 border-b border-[#0000001b] ${
-                index % 2 === 0 ? "border-r" : ""
-              }`}
-            >
-              <Image
-                src={item?.product_image1}
-                alt={item?.product_name}
-                width={65}
-                height={65}
-              />
-              <div>
-                <p className="text-third text-sm font-medium font-poppins mb-2">
-                  {item?.product_name.split(" ").map((word, idx) => (
-                    <React.Fragment key={idx}>
-                      {highlightText(word, search.split(" ").filter(Boolean))}{" "}
-                    </React.Fragment>
-                  ))}
-                </p>
-                <p className="text-primary text-sm font-medium font-poppins">
-                  {item?.regular_price && (
-                    <span className="text-[#bbb] text-[13px] font-normal line-through mr-1">
-                      {item?.regular_price} €
-                    </span>
-                  )}
-                  {item?.sale_price} €
-                </p>
-              </div>
-            </Link>
-          ))}
+        <div className="absolute left-0 right-0 max-h-[60vh] overflow-y-auto filters top-full bg-white border border-gray-300 rounded-b-md shadow-md mt-1 z-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2">
+            {product?.map((item, index) => (
+              <Link
+                href={item?.slug}
+                key={index}
+                className={`flex p-3 gap-3 hover:bg-gray-100 border-b border-[#0000001b] ${
+                  index % 2 === 0 ? "border-r" : ""
+                }`}
+              >
+                <Image
+                  src={item?.product_image1}
+                  alt={item?.product_name}
+                  width={65}
+                  height={65}
+                />
+                <div>
+                  <p className="text-third text-sm font-medium font-poppins mb-2">
+                    {item?.product_name.split(" ").map((word, idx) => (
+                      <React.Fragment key={idx}>
+                        {highlightText(word, search.split(" ").filter(Boolean))}{" "}
+                      </React.Fragment>
+                    ))}
+                  </p>
+                  <p className="text-primary text-sm font-medium font-poppins">
+                    {item?.regular_price && (
+                      <span className="text-[#bbb] text-[13px] font-normal line-through mr-1">
+                        {item?.regular_price} €
+                      </span>
+                    )}
+                    {item?.sale_price} €
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+          <Link
+            href={`/search/?search=${search}`}
+            className="uppercase w-full block text-center hover:bg-[#f7f7f7] p-3 text-third font-semibold text-sm font-lato"
+          >
+            View all results
+          </Link>
         </div>
       )}
       {search && product?.length === 0 && (

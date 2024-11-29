@@ -19,7 +19,7 @@ import MobileNav from "@/components/mobile_nav";
 
 const ITEMS_PER_PAGE = 2;
 
-const Filters = ({ allProducts, setLoading }) => {
+const Filters = ({ allProducts, setLoading, isSearch }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -27,9 +27,13 @@ const Filters = ({ allProducts, setLoading }) => {
   const [range, setRange] = useState([10, 3000]);
 
   const [minSalePrice, maxSalePrice] = useMemo(() => {
-    const salePrices = allProducts
-      .map((product) => product?.attributes?.sale_price)
-      .filter((price) => price != null);
+    const salePrices = isSearch
+      ? allProducts
+          ?.map((product) => product?.sale_price)
+          ?.filter((price) => price != null)
+      : allProducts
+          ?.map((product) => product?.attributes?.sale_price)
+          ?.filter((price) => price != null);
 
     const minPrice = Math.min(...salePrices);
     const maxPrice = Math.max(...salePrices);
@@ -88,7 +92,9 @@ const Filters = ({ allProducts, setLoading }) => {
 
     allProducts?.forEach((product) => {
       Object.keys(counts).forEach((attribute) => {
-        const value = product?.attributes[attribute];
+        const value = isSearch
+          ? product?.[attribute]
+          : product?.attributes[attribute];
         if (value) {
           counts[attribute][value] = (counts[attribute][value] || 0) + 1;
         }
@@ -216,6 +222,7 @@ const Products = ({
   products,
   totalProducts,
   description,
+  isSearch,
 }) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -289,22 +296,28 @@ const Products = ({
   return (
     <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-8 my-12">
       <div className="flex gap-6">
-        {totalProducts > 0 && (
+        {totalProducts > 0 && allProducts && (
           <div className="w-[20%] hidden lg:block">
-            <Filters allProducts={allProducts} setLoading={setLoading} />
+            <Filters
+              allProducts={allProducts}
+              setLoading={setLoading}
+              isSearch={isSearch}
+            />
           </div>
         )}
 
         <div
           className={`${
-            totalProducts > 0 ? "w-[100%] lg:w-[80%]" : "w-[100%]"
+            totalProducts > 0 && allProducts
+              ? "w-[100%] lg:w-[80%]"
+              : "w-[100%]"
           }`}
         >
           <div className="flex flex-col lg:flex-row justify-between gap-y-8 lg:items-center mb-4 px-4 sm:px-8 py-8 bg-[#f8f8f8] w-full">
             <h2 className="text-2xl font-poppins font-semibold text-[#242424]">
               {departmentName}
             </h2>
-            {totalProducts > 0 && (
+            {totalProducts > 0 && allProducts && (
               <div className="flex justify-between flex-wrap gap-x-8 gap-y-6 items-center w-full lg:w-fit">
                 <div className="block lg:hidden">
                   <MobileNav
@@ -315,6 +328,7 @@ const Products = ({
                     <Filters
                       allProducts={allProducts}
                       setLoading={setLoading}
+                      isSearch={isSearch}
                     />
                   </MobileNav>
                 </div>
@@ -339,7 +353,7 @@ const Products = ({
               </div>
             )}
           </div>
-          {Object.keys(appliedFilters).length > 0 && (
+          {Object.keys(appliedFilters).length > 0 && allProducts && (
             <div className="mb-4 flex flex-wrap gap-3">
               <div
                 onClick={clearAllFilters}
@@ -387,7 +401,11 @@ const Products = ({
             <div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-3 mb-10">
                 {products?.map((product) => (
-                  <ProductCard product={product} key={product.id} />
+                  <ProductCard
+                    product={product}
+                    key={product.id}
+                    isSearch={isSearch}
+                  />
                 ))}
               </div>
               {totalPages > 1 && (
