@@ -157,61 +157,63 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
         </button>
       </div>
 
-      {Object.entries(attributeCounts).map(([attribute, values], index) => (
-        <Accordion
-          open={open.includes(index)}
-          key={attribute}
-          className="border-b border-blue-gray-100 outline-none"
-        >
-          <AccordionHeader
-            onClick={() => handleOpen(index)}
-            className="border-0 py-0 my-5 text-black w-fit outline-none flex gap-1"
+      {Object.entries(attributeCounts)
+        ?.filter(([attribute, values]) => Object.keys(values).length > 0)
+        ?.map(([attribute, values], index) => (
+          <Accordion
+            open={open.includes(index)}
+            key={attribute}
+            className="border-b border-blue-gray-100 outline-none"
           >
-            <h3 className="font-semibold text-base font-poppins text-[#242424] uppercase">
-              {attribute}
-            </h3>
-            <span
-              className={`text-black w-3 h-3 transition-all duration-300 ease-in-out ${
-                open.includes(index) ? "rotate-180" : ""
-              }`}
+            <AccordionHeader
+              onClick={() => handleOpen(index)}
+              className="border-0 py-0 my-5 text-black w-fit outline-none flex gap-1"
             >
-              <ChevronDown />
-            </span>
-          </AccordionHeader>
-          <AccordionBody className="pt-0">
-            <ul className="max-h-[223px] h-fit overflow-y-auto filters">
-              {Object.entries(values).map(([value, count]) => (
-                <li
-                  key={value}
-                  className="flex justify-between mb-3 font-lato text-[#767676] font-normal cursor-pointer group"
-                  onClick={() => handleAttributeFilter(attribute, value)}
-                >
-                  <span
-                    className={`capitalize text-sm group-hover:text-secondary ${
-                      searchParams?.get(attribute) ===
-                      value.split(" ").join("_")
-                        ? "text-secondary"
-                        : ""
-                    }`}
+              <h3 className="font-semibold text-base font-poppins text-[#242424] uppercase">
+                {attribute}
+              </h3>
+              <span
+                className={`text-black w-3 h-3 transition-all duration-300 ease-in-out ${
+                  open.includes(index) ? "rotate-180" : ""
+                }`}
+              >
+                <ChevronDown />
+              </span>
+            </AccordionHeader>
+            <AccordionBody className="pt-0">
+              <ul className="max-h-[223px] h-fit overflow-y-auto filters">
+                {Object.entries(values).map(([value, count]) => (
+                  <li
+                    key={value}
+                    className="flex justify-between mb-3 font-lato text-[#767676] font-normal cursor-pointer group"
+                    onClick={() => handleAttributeFilter(attribute, value)}
                   >
-                    {value}
-                  </span>
-                  <span
-                    className={`p-1 rounded-full border leading-none text-xs min-w-[30px] text-center group-hover:bg-primary group-hover:text-white ${
-                      searchParams?.get(attribute) ===
-                      value.split(" ").join("_")
-                        ? "bg-primary text-white"
-                        : ""
-                    }`}
-                  >
-                    {count}
-                  </span>
-                </li>
-              ))}
-            </ul>
-          </AccordionBody>
-        </Accordion>
-      ))}
+                    <span
+                      className={`capitalize text-sm group-hover:text-secondary ${
+                        searchParams?.get(attribute) ===
+                        value.split(" ").join("_")
+                          ? "text-secondary"
+                          : ""
+                      }`}
+                    >
+                      {value}
+                    </span>
+                    <span
+                      className={`p-1 rounded-full border leading-none text-xs min-w-[30px] text-center group-hover:bg-primary group-hover:text-white ${
+                        searchParams?.get(attribute) ===
+                        value.split(" ").join("_")
+                          ? "bg-primary text-white"
+                          : ""
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </AccordionBody>
+          </Accordion>
+        ))}
     </div>
   );
 };
@@ -256,10 +258,13 @@ const Products = ({
   const handlePageChange = (page) => {
     setLoading(true);
     const newSearchParams = new URLSearchParams(searchParams);
-    const newPath = pathname.replace(/\/page\/\d+\/?$/, `/page/${page}/`);
+    let newPath = pathname;
+    if (pathname.includes("/page/")) {
+      newPath = pathname.replace(/\/page\/\d+\/?$/, `/page/${page}/`);
+    } else {
+      newPath = pathname + `/page/${page}/`;
+    }
     router.push(`${newPath}?${newSearchParams.toString()}`);
-    // newSearchParams.set("page", page);
-    // router.push(`?${newSearchParams.toString()}`);
   };
 
   useEffect(() => {
@@ -332,24 +337,26 @@ const Products = ({
                     />
                   </MobileNav>
                 </div>
-                <div className="relative inline-block w-fit">
-                  <select
-                    className="w-fit border-b-2 border-[#0000001a] pb-1 outline-none focus:outline-none rounded-none text-[#242424] focus:border-primary transition-all duration-300 ease-in-out font-semibold font-lato text-sm bg-[#f8f8f8] appearance-none pr-8"
-                    onChange={handleSortChange}
-                    defaultValue={searchParams.get("order") || "date"}
-                  >
-                    <option value="date">Sort by newest</option>
-                    <option value="price">Sort by price: Low to High</option>
-                    <option value="price-desc">
-                      Sort by price: High to Low
-                    </option>
-                  </select>
-                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                    <div className="w-4 h-4 text-[#242424]">
-                      <ChevronDown />
-                    </div>
-                  </span>
-                </div>
+                {!allProducts && (
+                  <div className="relative inline-block w-fit">
+                    <select
+                      className="w-fit border-b-2 border-[#0000001a] pb-1 outline-none focus:outline-none rounded-none text-[#242424] focus:border-primary transition-all duration-300 ease-in-out font-semibold font-lato text-sm bg-[#f8f8f8] appearance-none pr-8"
+                      onChange={handleSortChange}
+                      defaultValue={searchParams.get("order") || "date"}
+                    >
+                      <option value="date">Sort by newest</option>
+                      <option value="price">Sort by price: Low to High</option>
+                      <option value="price-desc">
+                        Sort by price: High to Low
+                      </option>
+                    </select>
+                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                      <div className="w-4 h-4 text-[#242424]">
+                        <ChevronDown />
+                      </div>
+                    </span>
+                  </div>
+                )}
               </div>
             )}
           </div>

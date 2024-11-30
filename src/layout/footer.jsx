@@ -1,10 +1,27 @@
-import { ProductByDepartment, SocialLinks } from "@/components";
+"use client";
+import { SocialLinks } from "@/components";
 import Image from "next/image";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 
 const Footer = ({ data, icons }) => {
+  const [showCookieBanner, setShowCookieBanner] = useState(false);
+
+  useEffect(() => {
+    // Check if the cookie "userConsent" exists
+    const consent = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("userConsent="));
+    if (!consent) {
+      setShowCookieBanner(true); // Show the banner if no cookie found
+    }
+  }, []);
   return (
-    <div className="flex justify-center items-center w-full bg-[#f7f7f7]">
+    <div
+      className={`flex justify-center items-center w-full bg-[#f7f7f7] ${
+        showCookieBanner ? "pb-24" : ""
+      }`}
+    >
       <div className="max-w-[1600px] w-full sm:mx-8 mx-4 my-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-4">
         {/* <div className="flex flex-col sm:flex-row w-full gap-y-12 gap-x-24"> */}
         <div className="flex flex-col gap-6 h-full justify-between">

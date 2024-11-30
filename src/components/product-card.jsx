@@ -85,18 +85,25 @@ const ProductCard = ({ product, isSearch }) => {
         </div>
       </div>
       <Link
-        href={product_url}
-        target="_blank"
-        className="relative w-[92%] bg-[#536162] hover:bg-third transition-all ease-in-out duration-300 text-white text-[13px] font-lato py-5 block mx-auto my-2 group font-semibold rounded-md overflow-hidden"
+        href={`/single-product/?page=${product_url}`}
+        passHref
+        legacyBehavior
+        className=""
       >
-        <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 transform group-hover:-translate-y-full opacity-100 group-hover:opacity-0 uppercase">
-          TO THE SHOP
-        </div>
-        <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
-          <div className="w-6 h-6 m-auto">
-            <Navigate />
+        <a
+          rel="nofollow"
+          target="_blank"
+          className="relative w-[92%] bg-[#536162] hover:bg-third transition-all ease-in-out duration-300 text-white text-[13px] font-lato py-5 block mx-auto my-2 group font-semibold rounded-md overflow-hidden"
+        >
+          <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 transform group-hover:-translate-y-full opacity-100 group-hover:opacity-0 uppercase">
+            TO THE SHOP
           </div>
-        </div>
+          <div className="absolute inset-0 flex items-center justify-center transition-all duration-300 transform translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+            <div className="w-6 h-6 m-auto">
+              <Navigate />
+            </div>
+          </div>
+        </a>
       </Link>
     </div>
   );

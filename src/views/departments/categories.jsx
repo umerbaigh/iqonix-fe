@@ -42,12 +42,16 @@ const Categories = ({ totalProducts, breadcrumbs, categories }) => {
         )}
       </div>
       {categories && categories?.length > 0 && (
-        <div className="flex gap-x-4 gap-y-4 sm:gap-x-6 flex-wrap items-center justify-center px-4 py-4 mt-4 border border-[#7A7A7A] w-full">
+        <div
+          className={`flex gap-x-4 gap-y-4 subcategory px-4 items-center pt-4 mt-4 border border-[#7A7A7A] w-full ${
+            categories?.length > 6 ? "overflow-x-scroll" : "justify-center pb-4"
+          }`}
+        >
           {categories?.map((category) => (
             <Link
               href={`/cat/${category?.attributes?.slug}`}
               key={category.id}
-              className="text-sm text-third font-lato uppercase font-semibold hover:text-primary"
+              className="text-sm text-third font-lato uppercase whitespace-nowrap font-semibold hover:text-primary"
             >
               {category?.attributes?.name}
             </Link>

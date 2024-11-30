@@ -2,9 +2,9 @@ import { getServerSideData } from "@/utils/get-api";
 import Layout from "@/layout/page";
 import { Categories, Products } from "@/views/departments";
 
-const Page = async ({ searchParams }) => {
+const Page = async ({ searchParams, params }) => {
   const { search } = (await searchParams) || {};
-  const page = 1;
+  const { page } = await params;
   const all = true;
   const urls = {
     products: `/custom-products?search_word=${search}&page=${page}&pageSize=${2}`,

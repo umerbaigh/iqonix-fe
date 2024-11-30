@@ -7,6 +7,10 @@
   font-weight: 600;
 }
 
+.subcategory::-webkit-scrollbar {
+  width: 0px;
+}
+
 .filters::-webkit-scrollbar {
   width: 5px;
 }
