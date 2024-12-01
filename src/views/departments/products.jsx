@@ -88,6 +88,8 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
       width: {},
       height: {},
       depth: {},
+      size: {},
+      material: {},
     };
 
     allProducts?.forEach((product) => {
@@ -274,7 +276,7 @@ const Products = ({
   const appliedFilters = useMemo(() => {
     const filters = {};
     searchParams.forEach((value, key) => {
-      if (key !== "order") {
+      if (key !== "order" && key !== "search") {
         filters[key] = value.split("_").join(" ");
       }
     });
@@ -294,6 +296,8 @@ const Products = ({
     const newSearchParams = new URLSearchParams();
     if (searchParams.get("order"))
       newSearchParams.set("order", searchParams.get("order"));
+    if (searchParams.get("search"))
+      newSearchParams.set("search", searchParams.get("search"));
     const newPath = pathname.replace(/\/page\/\d+\/?$/, "/page/1/");
     router.push(`${newPath}?${newSearchParams.toString()}`);
   };
@@ -301,7 +305,7 @@ const Products = ({
   return (
     <div className="max-w-[1600px] mx-auto w-full px-4 sm:px-8 my-12">
       <div className="flex gap-6">
-        {totalProducts > 0 && allProducts && (
+        {totalProducts > 0 && (
           <div className="w-[20%] hidden lg:block">
             <Filters
               allProducts={allProducts}
@@ -313,16 +317,14 @@ const Products = ({
 
         <div
           className={`${
-            totalProducts > 0 && allProducts
-              ? "w-[100%] lg:w-[80%]"
-              : "w-[100%]"
+            totalProducts > 0 ? "w-[100%] lg:w-[80%]" : "w-[100%]"
           }`}
         >
           <div className="flex flex-col lg:flex-row justify-between gap-y-8 lg:items-center mb-4 px-4 sm:px-8 py-8 bg-[#f8f8f8] w-full">
             <h2 className="text-2xl font-poppins font-semibold text-[#242424]">
               {departmentName}
             </h2>
-            {totalProducts > 0 && allProducts && (
+            {totalProducts > 0 && (
               <div className="flex justify-between flex-wrap gap-x-8 gap-y-6 items-center w-full lg:w-fit">
                 <div className="block lg:hidden">
                   <MobileNav
@@ -337,30 +339,28 @@ const Products = ({
                     />
                   </MobileNav>
                 </div>
-                {!allProducts && (
-                  <div className="relative inline-block w-fit">
-                    <select
-                      className="w-fit border-b-2 border-[#0000001a] pb-1 outline-none focus:outline-none rounded-none text-[#242424] focus:border-primary transition-all duration-300 ease-in-out font-semibold font-lato text-sm bg-[#f8f8f8] appearance-none pr-8"
-                      onChange={handleSortChange}
-                      defaultValue={searchParams.get("order") || "date"}
-                    >
-                      <option value="date">Sort by newest</option>
-                      <option value="price">Sort by price: Low to High</option>
-                      <option value="price-desc">
-                        Sort by price: High to Low
-                      </option>
-                    </select>
-                    <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
-                      <div className="w-4 h-4 text-[#242424]">
-                        <ChevronDown />
-                      </div>
-                    </span>
-                  </div>
-                )}
+                <div className="relative inline-block w-fit">
+                  <select
+                    className="w-fit border-b-2 border-[#0000001a] pb-1 outline-none focus:outline-none rounded-none text-[#242424] focus:border-primary transition-all duration-300 ease-in-out font-semibold font-lato text-sm bg-[#f8f8f8] appearance-none pr-8"
+                    onChange={handleSortChange}
+                    defaultValue={searchParams.get("order") || "date"}
+                  >
+                    <option value="date">Sort by newest</option>
+                    <option value="price">Sort by price: Low to High</option>
+                    <option value="price-desc">
+                      Sort by price: High to Low
+                    </option>
+                  </select>
+                  <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                    <div className="w-4 h-4 text-[#242424]">
+                      <ChevronDown />
+                    </div>
+                  </span>
+                </div>
               </div>
             )}
           </div>
-          {Object.keys(appliedFilters).length > 0 && allProducts && (
+          {Object.keys(appliedFilters).length > 0 && (
             <div className="mb-4 flex flex-wrap gap-3">
               <div
                 onClick={clearAllFilters}

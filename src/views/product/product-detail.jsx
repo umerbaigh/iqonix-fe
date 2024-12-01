@@ -82,19 +82,23 @@ const ProductDetail = ({ product }) => {
           </a>{" "}
           /<span> {product?.product_name}</span>
         </nav> */}
-          <p className="text-sm font-lato text-third font-semibold">
+          {/* <p className="text-sm font-lato text-third font-semibold">
             {product?.product_name}
-          </p>
+          </p> */}
 
-          <Image
-            src={
-              product?.shops?.data[0]?.attributes?.image?.data?.attributes?.url
-            }
-            alt={product?.shops?.data[0]?.attributes?.name}
-            width={90}
-            height={50}
-            className="my-4"
-          />
+          {product?.shops?.data[0]?.attributes?.image?.data?.attributes
+            ?.url && (
+            <Image
+              src={
+                product?.shops?.data[0]?.attributes?.image?.data?.attributes
+                  ?.url
+              }
+              alt={product?.shops?.data[0]?.attributes?.name}
+              width={90}
+              height={50}
+              className="my-4"
+            />
+          )}
 
           <h1 className="text-[28px] font-poppins text-third font-semibold">
             {product?.product_name}

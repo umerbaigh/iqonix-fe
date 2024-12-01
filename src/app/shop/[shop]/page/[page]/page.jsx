@@ -4,8 +4,18 @@ import Layout from "@/layout/page";
 import { Categories, Products } from "@/views/departments";
 
 const Page = async ({ params, searchParams }) => {
-  const { order, color, delivery, width, height, depth, min, max } =
-    (await searchParams) || {};
+  const {
+    order,
+    color,
+    delivery,
+    width,
+    height,
+    depth,
+    size,
+    material,
+    min,
+    max,
+  } = (await searchParams) || {};
   // console.log("page", page);
   const { shop, page } = await params;
   const urls = {
@@ -28,6 +38,8 @@ const Page = async ({ params, searchParams }) => {
   if (width) productFilters.width = { eq: width.split("_").join(" ") };
   if (height) productFilters.height = { eq: height.split("_").join(" ") };
   if (depth) productFilters.depth = { eq: depth.split("_").join(" ") };
+  if (size) productFilters.size = { eq: size.split("_").join(" ") };
+  if (material) productFilters.material = { eq: material.split("_").join(" ") };
 
   // Handle min and max for sale_price as a single filter object
   if (min !== undefined || max !== undefined) {

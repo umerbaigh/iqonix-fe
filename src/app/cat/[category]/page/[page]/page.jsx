@@ -5,8 +5,18 @@ import Layout from "@/layout/page";
 import { Categories, Products } from "@/views/departments";
 
 const Page = async ({ params, searchParams }) => {
-  const { order, color, delivery, width, height, depth, min, max } =
-    (await searchParams) || {};
+  const {
+    order,
+    color,
+    delivery,
+    width,
+    height,
+    depth,
+    size,
+    material,
+    min,
+    max,
+  } = (await searchParams) || {};
   // console.log("page", page);
   const { category, page } = await params;
   const fetchCategoryWithParents = async (slug) => {
@@ -69,9 +79,59 @@ const Page = async ({ params, searchParams }) => {
   const urls = {
     categories: `/categories/?filters[slug][$eq]=${category}&populate[parent][populate]=*`,
   };
+  let url = `/category/${category}/?page=${page}&pageSize=2`;
+  let url2 = `/category/${category}/?page=-1`;
+  let sortOption = "";
+  if (order === "date") {
+    sortOption = "createdAt";
+  } else if (order === "price") {
+    sortOption = "sale_price";
+  } else if (order === "price-desc") {
+    sortOption = "-sale_price";
+  }
 
-  const [categories] = await Promise.all([
+  let queryParams = [];
+  if (sortOption !== "" && sortOption) {
+    queryParams.push(`sort=${sortOption}`);
+  }
+  if (color) {
+    queryParams.push(`color=${color}`);
+  }
+  if (delivery) {
+    queryParams.push(`delivery=${delivery}`);
+  }
+  if (width) {
+    queryParams.push(`width=${width}`);
+  }
+  if (height) {
+    queryParams.push(`height=${height}`);
+  }
+  if (depth) {
+    queryParams.push(`depth=${depth}`);
+  }
+  if (size) {
+    queryParams.push(`size=${size}`);
+  }
+  if (material) {
+    queryParams.push(`material=${material}`);
+  }
+  if (min) {
+    queryParams.push(`min_sale_price=${min}`);
+  }
+  if (max) {
+    queryParams.push(`max_sale_price=${max}`);
+  }
+
+  // Combine query params into the URL
+  if (queryParams.length > 0) {
+    url += `&${queryParams.join("&")}`;
+    url2 += `&${queryParams.join("&")}`;
+  }
+
+  const [categories, pageProducts, allProducts] = await Promise.all([
     getServerSideData(urls.categories, true),
+    getServerSideData(url, true),
+    getServerSideData(url2, true),
   ]);
   // console.log(categories);
 
@@ -81,120 +141,8 @@ const Page = async ({ params, searchParams }) => {
       true
     ),
   ]);
-  // console.log(sub_categories);
 
-  let sortOption = "";
-  if (order === "date") {
-    sortOption = 'sort: "createdAt:desc"';
-  } else if (order === "price") {
-    sortOption = 'sort: "sale_price:asc"';
-  } else if (order === "price-desc") {
-    sortOption = 'sort: "sale_price:desc"';
-  }
-
-  let productFilters = {};
-  if (color) productFilters.color = { eq: color.split("_").join(" ") };
-  if (delivery) productFilters.delivery = { eq: delivery.split("_").join(" ") };
-  if (width) productFilters.width = { eq: width.split("_").join(" ") };
-  if (height) productFilters.height = { eq: height.split("_").join(" ") };
-  if (depth) productFilters.depth = { eq: depth.split("_").join(" ") };
-
-  // Handle min and max for sale_price as a single filter object
-  if (min !== undefined || max !== undefined) {
-    productFilters.sale_price = {};
-    if (min !== undefined) productFilters.sale_price.gt = parseFloat(min) - 1;
-    if (max !== undefined) productFilters.sale_price.lt = parseFloat(max) + 1;
-  }
-
-  // Convert filters to GraphQL string format if there are any
-  const productFiltersString = Object.entries(productFilters).length
-    ? `filters: { ${Object.entries(productFilters)
-        .map(
-          ([key, value]) =>
-            `${key}: { ${Object.entries(value)
-              .map(([k, v]) => `${k}: ${typeof v === "string" ? `"${v}"` : v}`)
-              .join(", ")} }`
-        )
-        .join(", ")} }`
-    : "";
-
-  const query1 = `
-    query {
-      categories(filters: { slug: { eq: "${category}" } }) {
-        data {
-          id
-          attributes {
-            name
-            products(${productFiltersString}, pagination: { limit: -1 }, ${sortOption}) {
-              data {
-                id
-                attributes {
-                  sale_price
-                  color
-                  delivery
-                  width
-                  height
-                  depth
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const query2 = `
-    query {
-      categories(filters: { slug: { eq: "${category}" } }) {
-        data {
-          id
-          attributes {
-            name
-            products(${productFiltersString}, pagination: { page: ${page}, pageSize: 2 }, ${sortOption}) {
-              data {
-                id
-                attributes {
-                  product_name
-                  regular_price
-                  sale_price
-                  product_image1
-                  product_url 
-                  slug
-                  shops {
-                    data {
-                      id
-                      attributes {
-                        name
-                        slug
-                      }
-                    }
-                  }
-                  categories {
-                    data {
-                      id
-                      attributes {
-                        name
-                        slug
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  `;
-
-  const [allProducts, pageProducts] = await Promise.all([
-    getGraphql(query1, true),
-    getGraphql(query2, true),
-  ]);
-
-  const length =
-    allProducts?.data?.categories?.data[0]?.attributes?.products?.data?.length;
+  const length = allProducts?.products?.length;
 
   return (
     <div>
@@ -205,17 +153,12 @@ const Page = async ({ params, searchParams }) => {
           categories={sub_categories?.data}
         />
         <Products
-          departmentName={
-            pageProducts?.data?.categories?.data[0]?.attributes?.name
-          }
-          allProducts={
-            allProducts?.data?.categories?.data[0]?.attributes?.products?.data
-          }
-          products={
-            pageProducts?.data?.categories?.data[0]?.attributes?.products?.data
-          }
+          departmentName={categories?.data?.[0]?.attributes?.name}
+          allProducts={allProducts?.products}
+          products={pageProducts?.products}
           totalProducts={length}
           description={categories?.data[0]?.attributes?.description}
+          isSearch={true}
         />
       </Layout>
     </div>

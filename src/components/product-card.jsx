@@ -22,7 +22,6 @@ const ProductCard = ({ product, isSearch }) => {
     categories,
     shops,
   } = isSearch ? product || {} : product?.attributes || {};
-
   // Access category properly
   const category = Array.isArray(categories)
     ? categories?.[0]
