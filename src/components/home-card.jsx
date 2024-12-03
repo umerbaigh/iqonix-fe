@@ -4,16 +4,16 @@ import Link from "next/link";
 const HomeCard = ({ data }) => {
   return (
     <div className="group h-full mx-auto max-w-[400px] sm:max-w-full w-full">
-      <div className="flex items-center justify-between flex-col md:flex-row gap-y-6 bg-[#f8f8f8] overflow-hidden group p-4 h-full w-full">
+      <div className="flex items-center justify-between flex-col md:flex-row gap-y-6 bg-[#f8f8f8] overflow-hidden md:group p-4 h-full w-full">
         <Image
           src={data?.image?.data?.attributes?.url}
           alt={data?.title}
           width={150}
           height={100}
-          className="transform scale-100 group-hover:scale-[1.3] transition duration-500 ease-in-out"
+          className="transform scale-100 md:group-hover:scale-[1.3] transition duration-500 ease-in-out"
         />
         <div className="flex flex-col items-center md:items-end justify-center mr-4 transition duration-500 ease-in-out">
-          <div className="transform transition duration-500 ease-in-out group-hover:-translate-y-3">
+          <div className="transform transition duration-500 ease-in-out md:group-hover:-translate-y-3 mb-5 md:mb-0">
             <p className="text-[#a5a5a5] uppercase mx-auto md:mr-0 md:ml-auto w-fit">
               {data?.tag}
             </p>
@@ -26,7 +26,7 @@ const HomeCard = ({ data }) => {
           </div>
           <Link
             href={data?.link}
-            className="text-[13px] font-poppins text-white bg-black uppercase font-semibold py-2 px-3 flex justify-end ml-auto opacity-0 transform translate-y-10 transition-transform duration-500 ease-in-out group-hover:opacity-100 group-hover:translate-y-0"
+            className="text-[13px] font-poppins text-white bg-black uppercase font-semibold py-2 px-3 flex md:justify-end md:ml-auto md:opacity-0 md:transform md:translate-y-10 transition-transform duration-500 ease-in-out md:group-hover:opacity-100 md:group-hover:translate-y-0"
           >
             {data?.btn_txt}
           </Link>
