@@ -74,7 +74,7 @@ const ProductCard = ({ product, isSearch }) => {
             </Link>
           )}
           <p className="text-primary text-sm font-semibold font-lato py-2">
-            {regular_price && (
+            {regular_price !== sale_price && (
               <span className="text-[#bbb] text-[13px] font-normal font-lato line-through mr-1">
                 {regular_price} €
               </span>

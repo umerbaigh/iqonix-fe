@@ -21,7 +21,7 @@ const Page = async ({ params, searchParams }) => {
   const page = 1;
   const { department } = await params;
   const urls = {
-    categories: `/departments/?filters[slug][$eq]=${department}&populate[categories][populate]=*`,
+    categories: `/departments/?filters[slug][$eq]=${department}&populate[categories][populate]=image`,
   };
   const [categories] = await Promise.all([
     getServerSideData(urls.categories, true),
@@ -105,7 +105,7 @@ const Page = async ({ params, searchParams }) => {
           id
           attributes {
             name
-            products(${productFiltersString}, pagination: { page: ${page}, pageSize: 2 }, ${sortOption}) {
+            products(${productFiltersString}, pagination: { page: ${page}, pageSize: 35 }, ${sortOption}) {
               data {
                 id
                 attributes {

@@ -1,6 +1,4 @@
-// import { BASE_URL, isLocal } from "@/utils/axios_instance";
 import { getServerSideData } from "@/utils/get-api";
-import { getGraphql } from "@/utils/get-graphql-api";
 import Layout from "@/layout/page";
 import {
   AboutUs,
@@ -18,7 +16,7 @@ const Page = async () => {
     mustHaveProduct: `/must-have-product/?populate[search_words][populate]=*`,
     card: `/home-product-cards/?populate=*`,
     about: `/home-about/?populate=*`,
-    shop: `/shops/?populate=*`,
+    shop: `/shops/?populate=image`,
   };
   const [hero, shopByCategory, mustHaveProduct, card, about, shop] =
     await Promise.all([

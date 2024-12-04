@@ -6,7 +6,7 @@ import { ProductDetail } from "@/views/product";
 const Page = async ({ params }) => {
   const { slug } = await params;
   const urls = {
-    product: `/products/?filters[slug][$eq]=${slug}&populate[shops][populate]=*&populate[brand][populate]=*`,
+    product: `/products/?filters[slug][$eq]=${slug}&populate[shops][populate]=image&populate[brand][populate]=image`,
   };
   const [product] = await Promise.all([getServerSideData(urls.product, true)]);
   return (

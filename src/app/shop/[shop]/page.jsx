@@ -20,7 +20,7 @@ const Page = async ({ params, searchParams }) => {
   const page = 1;
   const { shop } = await params;
   const urls = {
-    shops: `/shops/?filters[slug][$eq]=${shop}&populate[categories][populate]=*`,
+    shops: `/shops/?filters[slug][$eq]=${shop}`,
   };
   const [shops] = await Promise.all([getServerSideData(urls.shops, true)]);
   // console.log(shops?.data[0]?.attributes);
@@ -94,7 +94,7 @@ const Page = async ({ params, searchParams }) => {
           id
           attributes {
             name
-            products(${productFiltersString}, pagination: { page: ${page}, pageSize: 2 }, ${sortOption}) {
+            products(${productFiltersString}, pagination: { page: ${page}, pageSize: 35 }, ${sortOption}) {
               data {
                 id
                 attributes {
@@ -135,6 +135,8 @@ const Page = async ({ params, searchParams }) => {
     getGraphql(query1, true),
     getGraphql(query2, true),
   ]);
+  // console.log("allProducts", allProducts);
+  // console.log("pageProducts", pageProducts);
   // const breadcrumbs = [
   //   "home page",
   //   `product shops ${pageProducts?.data?.shops?.data[0]?.attributes?.name}`,

@@ -16,6 +16,7 @@ const Page = async ({ params, searchParams }) => {
     material,
     min,
     max,
+    sales,
   } = (await searchParams) || {};
   // console.log("page", page);
   const page = 1;
@@ -80,7 +81,7 @@ const Page = async ({ params, searchParams }) => {
   const urls = {
     categories: `/categories/?filters[slug][$eq]=${category}&populate[parent][populate]=*`,
   };
-  let url = `/category/${category}/?page=${page}&pageSize=2`;
+  let url = `/category/${category}/?page=${page}&pageSize=35`;
   let url2 = `/category/${category}/?page=-1`;
   let sortOption = "";
   if (order === "date") {
@@ -116,6 +117,9 @@ const Page = async ({ params, searchParams }) => {
   if (material) {
     queryParams.push(`material=${material}`);
   }
+  if (sales) {
+    queryParams.push(`sales=${sales}`);
+  }
   if (min) {
     queryParams.push(`min_sale_price=${min}`);
   }
@@ -134,7 +138,6 @@ const Page = async ({ params, searchParams }) => {
     getServerSideData(url, true),
     getServerSideData(url2, true),
   ]);
-  // console.log(categories);
 
   const [sub_categories] = await Promise.all([
     getServerSideData(

@@ -94,7 +94,7 @@ const Page = async ({ params, searchParams }) => {
           id
           attributes {
             name
-            products(${productFiltersString}, pagination: { page: ${page}, pageSize: 2 }, ${sortOption}) {
+            products(${productFiltersString}, pagination: { page: ${page}, pageSize: 35 }, ${sortOption}) {
               data {
                 id
                 attributes {

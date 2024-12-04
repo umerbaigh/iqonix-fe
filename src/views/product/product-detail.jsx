@@ -28,7 +28,7 @@ const ProductDetail = ({ product }) => {
     <div className="max-w-[1600px] w-full mx-auto mt-8">
       <div className="flex flex-col lg:flex-row gap-8 bg-[#fafafa] px-4 sm:px-8 py-12 rounded-lg">
         <div className="lg:w-[55%] w-full flex flex-col sm:flex-row gap-8">
-          {productImageArr?.length > 2 && (
+          {productImageArr?.length > 1 && (
             <div className="flex flex-row sm:flex-col justify-between lg:justify-start lg:mb-6">
               {productImageArr?.map((item, index) => (
                 <div
@@ -103,12 +103,14 @@ const ProductDetail = ({ product }) => {
           <h1 className="text-[28px] font-poppins text-third font-semibold">
             {product?.product_name}
           </h1>
-          <p className="text-[#777777] text-sm font-lato my-6">
-            {product?.short_description}
-          </p>
+          {product?.short_description && (
+            <p className="text-[#777777] text-sm font-lato my-6">
+              {product?.short_description}
+            </p>
+          )}
 
           <p className="text-primary text-[34px] font-semibold font-lato py-2 mb-4">
-            {product?.regular_price && (
+            {product?.regular_price !== product?.sale_price && (
               <span className="text-[#bbb] font-normal font-lato line-through mr-2">
                 {product?.regular_price} €
               </span>

@@ -2,7 +2,7 @@
 import { useParams } from "next/navigation";
 import Link from "next/link";
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 35;
 
 const Categories = ({ totalProducts, breadcrumbs, categories }) => {
   const params = useParams();

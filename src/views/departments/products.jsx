@@ -17,7 +17,7 @@ import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
 import MobileNav from "@/components/mobile_nav";
 
-const ITEMS_PER_PAGE = 2;
+const ITEMS_PER_PAGE = 35;
 
 const Filters = ({ allProducts, setLoading, isSearch }) => {
   const router = useRouter();
@@ -54,6 +54,14 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
     const newSearchParams = new URLSearchParams(searchParams);
     newSearchParams.set("min", range[0]);
     newSearchParams.set("max", range[1]);
+    const newPath = pathname.replace(/\/page\/\d+\/?$/, "/page/1/");
+    router.push(`${newPath}?${newSearchParams.toString()}`);
+  };
+
+  const handleSalesFilterClick = () => {
+    setLoading(true);
+    const newSearchParams = new URLSearchParams(searchParams);
+    newSearchParams.set("sales", true);
     const newPath = pathname.replace(/\/page\/\d+\/?$/, "/page/1/");
     router.push(`${newPath}?${newSearchParams.toString()}`);
   };
@@ -158,6 +166,13 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
           Filter
         </button>
       </div>
+
+      <button
+        className="px-4 py-3 bg-[#f7f7f7] uppercase text-third text-xs font-lato font-semibold rounded hover:bg-gray-300"
+        onClick={handleSalesFilterClick}
+      >
+        Filter by Sales
+      </button>
 
       {Object.entries(attributeCounts)
         ?.filter(([attribute, values]) => Object.keys(values).length > 0)

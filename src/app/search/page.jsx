@@ -15,10 +15,11 @@ const Page = async ({ searchParams }) => {
     material,
     min,
     max,
+    sales,
   } = (await searchParams) || {};
   const page = 1;
   const all = true;
-  let url = `/custom-products/?search_word=${search}&page=${page}&pageSize=2`;
+  let url = `/custom-products/?search_word=${search}&page=${page}&pageSize=35`;
   let url2 = `/custom-products/?search_word=${search}&all=${all}`;
   let sortOption = "";
   if (order === "date") {
@@ -53,6 +54,9 @@ const Page = async ({ searchParams }) => {
   }
   if (material) {
     queryParams.push(`material=${material}`);
+  }
+  if (sales) {
+    queryParams.push(`sales=${sales}`);
   }
   if (min) {
     queryParams.push(`min_sale_price=${min}`);
