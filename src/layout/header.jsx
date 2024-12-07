@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { ChevronDown, Search } from "@/icons";
 import { Menu, MenuHandler, MenuList, Button } from "@material-tailwind/react";
-import { SocialLinks, ProductByDepartment, SearchInput } from "@/components";
+import { SocialLinks, SearchInput } from "@/components";
 import MobileNav from "../components/mobile_nav";
 
 const Header = ({ data }) => {
@@ -83,17 +83,19 @@ const Header = ({ data }) => {
                   </Button>
                 </Link>
               </MenuHandler>
-              <MenuList className="max-w-[1600px] overflow-hidden w-full px-4 py-8">
-                <div className="grid grid-cols-4 gap-y-6 gap-x-12 outline-none mx-auto w-fit">
-                  {item?.dropdown_links?.map((category) => (
-                    <Link
-                      key={category?.id}
-                      href={category?.link}
-                      className="text-gray1 font-sm hover:text-primary w-fit"
-                    >
-                      {category?.text}
-                    </Link>
-                  ))}
+              <MenuList className="flex justify-center overflow-hidden w-full px-4 py-8">
+                <div className="max-w-[1600px] w-full outline-none">
+                  <div className="grid grid-cols-4 gap-y-6 gap-x-12 outline-none mx-auto w-fit">
+                    {item?.dropdown_links?.map((category) => (
+                      <Link
+                        key={category?.id}
+                        href={category?.link}
+                        className="text-gray1 font-sm hover:text-primary w-fit"
+                      >
+                        {category?.text}
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </MenuList>
             </Menu>
@@ -104,9 +106,6 @@ const Header = ({ data }) => {
               className="flex items-center !text-[13px] !text-third hover:!text-primary hover:!bg-transparent focus:!outline-none font-bold !font-lato uppercase !p-0 "
             >
               {item?.text}
-              <div className="w-3 h-3">
-                <ChevronDown />
-              </div>
             </Link>
           )
         )}

@@ -137,15 +137,35 @@ const Page = async ({ params, searchParams }) => {
     getServerSideData(url, true),
     getServerSideData(url2, true),
   ]);
-  // console.log(categories);
 
-  const [sub_categories] = await Promise.all([
+  let [sub_categories] = await Promise.all([
     getServerSideData(
       `/categories/?filters[parent][$eq]=${categories?.data?.[0]?.id}`,
       true
     ),
   ]);
 
+  // console.log(sub_categories);
+  const subCategorySlugs =
+    sub_categories?.data?.map((category) => category?.attributes?.slug) || [];
+  // console.log(subCategorySlugs);
+  const validSubCategories = [];
+  for (const slug of subCategorySlugs) {
+    const response = await getServerSideData(
+      `/category/${slug}/?page=${page}&pageSize=1`, // Adjust the endpoint as per your API requirements
+      true
+    );
+
+    if (response?.products?.length > 0) {
+      validSubCategories.push(slug);
+    }
+  }
+
+  // console.log("Valid sub-categories:", validSubCategories);
+  sub_categories =
+    sub_categories?.data?.filter((cat) =>
+      validSubCategories.includes(cat?.attributes?.slug)
+    ) || [];
   const length = allProducts?.products?.length;
 
   return (
@@ -154,7 +174,7 @@ const Page = async ({ params, searchParams }) => {
         <Categories
           totalProducts={length}
           breadcrumbs={breadcrumbs}
-          categories={sub_categories?.data}
+          categories={sub_categories}
         />
         <Products
           departmentName={categories?.data?.[0]?.attributes?.name}

@@ -14,6 +14,11 @@
 .filters::-webkit-scrollbar {
   width: 5px;
 }
+input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #8b572a;
+}
 
 .filters::-webkit-scrollbar-thumb {
   background-color: #d5d5d5;

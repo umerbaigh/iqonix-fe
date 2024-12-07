@@ -55,7 +55,7 @@ const ProductDetail = ({ product }) => {
               alt="product"
               width={800}
               height={650}
-              className="rounded-lg w-full h-full max-h-[500px] object-cover"
+              className="rounded-lg w-full h-full max-h-[500px] object-contain object-center"
             />
             {discount > 0 && (
               <span className="absolute top-2 right-5 flex items-center justify-center bg-red-500 text-white font-lato text-sm font-bold w-[50px] h-[50px] rounded-full">

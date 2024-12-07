@@ -25,6 +25,7 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
   const searchParams = useSearchParams();
   const [open, setOpen] = useState([]);
   const [range, setRange] = useState([10, 3000]);
+  const [isChecked, setIsChecked] = useState(false);
 
   const [minSalePrice, maxSalePrice] = useMemo(() => {
     const salePrices = isSearch
@@ -45,6 +46,15 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
     setRange([minSalePrice, maxSalePrice]);
   }, [minSalePrice, maxSalePrice]);
 
+  useEffect(() => {
+    const newSearchParams = new URLSearchParams(searchParams);
+    if (newSearchParams?.get("sales")) {
+      setIsChecked(true);
+    } else {
+      setIsChecked(false);
+    }
+  }, [searchParams]);
+
   const handleSliderChange = (value) => {
     setRange(value);
   };
@@ -58,10 +68,14 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
     router.push(`${newPath}?${newSearchParams.toString()}`);
   };
 
-  const handleSalesFilterClick = () => {
+  const handleSalesFilterClick = (e) => {
     setLoading(true);
     const newSearchParams = new URLSearchParams(searchParams);
-    newSearchParams.set("sales", true);
+    if (e.target.checked) {
+      newSearchParams.set("sales", true);
+    } else {
+      newSearchParams.delete("sales");
+    }
     const newPath = pathname.replace(/\/page\/\d+\/?$/, "/page/1/");
     router.push(`${newPath}?${newSearchParams.toString()}`);
   };
@@ -167,12 +181,26 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
         </button>
       </div>
 
-      <button
+      {/* <button
         className="px-4 py-3 bg-[#f7f7f7] uppercase text-third text-xs font-lato font-semibold rounded hover:bg-gray-300"
         onClick={handleSalesFilterClick}
       >
         Filter by Sales
-      </button>
+      </button> */}
+      <div className="flex items-center mt-4">
+        <input
+          type="Checkbox"
+          id="sales"
+          checked={isChecked}
+          onChange={handleSalesFilterClick}
+        />
+        <label
+          htmlFor="sales"
+          className="font-semibold text-base font-poppins text-[#242424] uppercase ml-2"
+        >
+          Apply Sales Filter
+        </label>
+      </div>
 
       {Object.entries(attributeCounts)
         ?.filter(([attribute, values]) => Object.keys(values).length > 0)
