@@ -468,9 +468,10 @@ const Products = ({
               </div>
               {totalPages > 1 && (
                 <div className="flex gap-1 justify-center">
+                  {/* Previous Button */}
                   {currentPage > 1 && (
                     <button
-                      className={`px-3 py-2 rounded text-third font-lato font-semibold hover:bg-gray-200`}
+                      className="px-3 py-2 rounded text-third font-lato font-semibold hover:bg-gray-200"
                       onClick={() => handlePageChange(currentPage - 1)}
                     >
                       <div className="rotate-90 w-4 h-4 text-third">
@@ -478,19 +479,47 @@ const Products = ({
                       </div>
                     </button>
                   )}
-                  {Array.from({ length: totalPages }).map((_, index) => (
-                    <button
-                      key={index + 1}
-                      className={`px-4 py-2 rounded text-third font-lato font-semibold ${
-                        currentPage === index + 1
-                          ? "bg-primary text-white"
-                          : "hover:bg-gray-200"
-                      }`}
-                      onClick={() => handlePageChange(index + 1)}
-                    >
-                      {index + 1}
-                    </button>
-                  ))}
+
+                  {/* Pagination Numbers */}
+                  {Array.from({ length: totalPages })
+                    .map((_, index) => index + 1)
+                    .filter((page) => {
+                      // Show first 2 pages, last 2 pages, and 2 pages around the current page
+                      return (
+                        page <= 2 ||
+                        page > totalPages - 2 ||
+                        Math.abs(page - currentPage) <= 2
+                      );
+                    })
+                    .reduce((acc, page, index, pages) => {
+                      // Add ellipses between non-sequential pages
+                      if (index > 0 && page > pages[index - 1] + 1) {
+                        acc.push("...");
+                      }
+                      acc.push(page);
+                      return acc;
+                    }, [])
+                    .map((item, index) =>
+                      item === "..." ? (
+                        <span key={index} className="px-3 py-2 text-gray-500">
+                          ...
+                        </span>
+                      ) : (
+                        <button
+                          key={item}
+                          className={`px-4 py-2 rounded text-third font-lato font-semibold ${
+                            currentPage === item
+                              ? "bg-primary text-white"
+                              : "hover:bg-gray-200"
+                          }`}
+                          onClick={() => handlePageChange(item)}
+                        >
+                          {item}
+                        </button>
+                      )
+                    )}
+
+                  {/* Next Button */}
                   {currentPage < totalPages && (
                     <button
                       className="px-3 py-2 rounded text-third font-lato font-semibold hover:bg-gray-200"
