@@ -105,13 +105,37 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
 
   const attributeCounts = useMemo(() => {
     const counts = {
-      color: {},
       delivery: {},
-      width: {},
-      height: {},
-      depth: {},
-      size: {},
-      material: {},
+      furniture_color: {},
+      furniture_material: {},
+      breite: {},
+      hoehe: {},
+      tiefe: {},
+      damen_normalgr: {},
+      damen_jeansgr: {},
+      damen_kurzgr: {},
+      damen_langgr: {},
+      cup_gr: {},
+      brustumfang: {},
+      miederhosengr: {},
+      strumpfhosengr: {},
+      sockengr: {},
+      herren_normalgr: {},
+      herren_jeansgr: {},
+      kragenweite: {},
+      herren_untersetztgr: {},
+      herren_schlankgr: {},
+      waschegr: {},
+      herren_bauchgr: {},
+      baby_normalgr: {},
+      kinder_normalg: {},
+      kinder_sockengr: {},
+      schuhgr: {},
+      kinder_schuhgr: {},
+      fashion_material: {},
+      fashion_color: {},
+      shoes_material: {},
+      shoes_color: {},
     };
 
     allProducts?.forEach((product) => {
@@ -215,7 +239,7 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
               className="border-0 py-0 my-5 text-black w-fit outline-none flex gap-1"
             >
               <h3 className="font-semibold text-base font-poppins text-[#242424] uppercase">
-                {attribute}
+                {attribute.split("_").join(" ")}
               </h3>
               <span
                 className={`text-black w-3 h-3 transition-all duration-300 ease-in-out ${

@@ -1,17 +1,14 @@
-import { TOKEN } from "./axios-instance";
+import { BASE_URL, TOKEN } from "./axios-instance";
 
 export async function getGraphql(query = "", check = false) {
-  const res = await fetch(
-    "https://iqonix-strapi-1c6eecc5667b.herokuapp.com/graphql",
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${TOKEN}`,
-      },
-      body: JSON.stringify({ query }),
-    }
-  );
+  const res = await fetch("http://localhost:1337/graphql", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${TOKEN}`,
+    },
+    body: JSON.stringify({ query }),
+  });
   //   const res = await fetch(
   //     `https://iqonix-strapi-1c6eecc5667b.herokuapp.com/graphql${url}`,
   //     {
