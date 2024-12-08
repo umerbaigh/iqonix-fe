@@ -192,19 +192,37 @@ const Page = async ({ params, searchParams }) => {
                 id
                 attributes {
                   sale_price
-                  color
                   delivery
-                  width
-                  height
-                  depth
-                  shops {
-                    data {
-                      id
-                      attributes {
-                        name
-                      }
-                    }
-                  }
+                  furniture_color
+                  furniture_material
+                  breite
+                  hoehe
+                  tiefe
+                  damen_normalgr
+                  damen_jeansgr
+                  damen_kurzgr
+                  damen_langgr
+                  cup_gr
+                  brustumfang
+                  miederhosengr
+                  strumpfhosengr
+                  sockengr
+                  herren_normalgr
+                  herren_jeansgr
+                  kragenweite
+                  herren_untersetztgr
+                  herren_schlankgr
+                  waschegr
+                  herren_bauchgr
+                  baby_normalgr
+                  kinder_normalg
+                  kinder_sockengr
+                  schuhgr
+                  kinder_schuhgr
+                  fashion_material
+                  fashion_color
+                  shoes_material
+                  shoes_color
                 }
               }
             }
