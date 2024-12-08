@@ -28,18 +28,7 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
   const [isChecked, setIsChecked] = useState(false);
 
   const [minSalePrice, maxSalePrice] = useMemo(() => {
-    const salePrices = isSearch
-      ? allProducts
-          ?.map((product) => product?.sale_price)
-          ?.filter((price) => price != null)
-      : allProducts
-          ?.map((product) => product?.attributes?.sale_price)
-          ?.filter((price) => price != null);
-
-    const minPrice = Math.min(...salePrices);
-    const maxPrice = Math.max(...salePrices);
-
-    return [minPrice, maxPrice];
+    return [allProducts?.price?.min, allProducts?.price?.max];
   }, [allProducts]);
 
   useEffect(() => {
@@ -103,53 +92,54 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
     });
   };
 
-  const attributeCounts = useMemo(() => {
-    const counts = {
-      delivery: {},
-      furniture_color: {},
-      furniture_material: {},
-      breite: {},
-      hoehe: {},
-      tiefe: {},
-      damen_normalgr: {},
-      damen_jeansgr: {},
-      damen_kurzgr: {},
-      damen_langgr: {},
-      cup_gr: {},
-      brustumfang: {},
-      miederhosengr: {},
-      strumpfhosengr: {},
-      sockengr: {},
-      herren_normalgr: {},
-      herren_jeansgr: {},
-      kragenweite: {},
-      herren_untersetztgr: {},
-      herren_schlankgr: {},
-      waschegr: {},
-      herren_bauchgr: {},
-      baby_normalgr: {},
-      kinder_normalg: {},
-      kinder_sockengr: {},
-      schuhgr: {},
-      kinder_schuhgr: {},
-      fashion_material: {},
-      fashion_color: {},
-      shoes_material: {},
-      shoes_color: {},
-    };
+  // const attributeCounts = useMemo(() => {
+  //   const counts = {
+  //     delivery: {},
+  //     furniture_color: {},
+  //     furniture_material: {},
+  //     breite: {},
+  //     hoehe: {},
+  //     tiefe: {},
+  //     damen_normalgr: {},
+  //     damen_jeansgr: {},
+  //     damen_kurzgr: {},
+  //     damen_langgr: {},
+  //     cup_gr: {},
+  //     brustumfang: {},
+  //     miederhosengr: {},
+  //     strumpfhosengr: {},
+  //     sockengr: {},
+  //     herren_normalgr: {},
+  //     herren_jeansgr: {},
+  //     kragenweite: {},
+  //     herren_untersetztgr: {},
+  //     herren_schlankgr: {},
+  //     waschegr: {},
+  //     herren_bauchgr: {},
+  //     baby_normalgr: {},
+  //     kinder_normalg: {},
+  //     kinder_sockengr: {},
+  //     schuhgr: {},
+  //     kinder_schuhgr: {},
+  //     fashion_material: {},
+  //     fashion_color: {},
+  //     shoes_material: {},
+  //     shoes_color: {},
+  //   };
 
-    allProducts?.forEach((product) => {
-      Object.keys(counts).forEach((attribute) => {
-        const value = isSearch
-          ? product?.[attribute]
-          : product?.attributes[attribute];
-        if (value) {
-          counts[attribute][value] = (counts[attribute][value] || 0) + 1;
-        }
-      });
-    });
-    return counts;
-  }, [allProducts]);
+  //   allProducts?.forEach((product) => {
+  //     Object.keys(counts).forEach((attribute) => {
+  //       const value = isSearch
+  //         ? product?.[attribute]
+  //         : product?.attributes[attribute];
+  //       if (value) {
+  //         counts[attribute][value] = (counts[attribute][value] || 0) + 1;
+  //       }
+  //     });
+  //   });
+  //   return counts;
+  // }, [allProducts]);
+  // console.log(attributeCounts);
 
   return (
     <div className="px-2 lg:px-0">
@@ -205,12 +195,6 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
         </button>
       </div>
 
-      {/* <button
-        className="px-4 py-3 bg-[#f7f7f7] uppercase text-third text-xs font-lato font-semibold rounded hover:bg-gray-300"
-        onClick={handleSalesFilterClick}
-      >
-        Filter by Sales
-      </button> */}
       <div className="flex items-center mt-4">
         <input
           type="Checkbox"
@@ -226,7 +210,7 @@ const Filters = ({ allProducts, setLoading, isSearch }) => {
         </label>
       </div>
 
-      {Object.entries(attributeCounts)
+      {Object.entries(allProducts?.data)
         ?.filter(([attribute, values]) => Object.keys(values).length > 0)
         ?.map(([attribute, values], index) => (
           <Accordion

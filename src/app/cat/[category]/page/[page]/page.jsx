@@ -261,7 +261,7 @@ const Page = async ({ params, searchParams }) => {
     sub_categories?.data?.filter((cat) =>
       validSubCategories.includes(cat?.attributes?.slug)
     ) || [];
-  const length = allProducts?.products?.length;
+  const length = allProducts?.meta?.total;
 
   return (
     <div>
@@ -273,7 +273,7 @@ const Page = async ({ params, searchParams }) => {
         />
         <Products
           departmentName={categories?.data?.[0]?.attributes?.name}
-          allProducts={allProducts?.products}
+          allProducts={allProducts}
           products={pageProducts?.products}
           totalProducts={length}
           description={categories?.data[0]?.attributes?.description}

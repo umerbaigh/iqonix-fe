@@ -179,7 +179,7 @@ const Page = async ({ searchParams }) => {
     },
   ];
 
-  const length = allProducts?.data?.length;
+  const length = allProducts?.meta?.total;
   return (
     <div>
       <Layout>
@@ -187,7 +187,7 @@ const Page = async ({ searchParams }) => {
         <Products
           departmentName={`Search: ${search}`}
           products={products?.data}
-          allProducts={allProducts?.data}
+          allProducts={allProducts}
           totalProducts={length}
           isSearch={true}
         />
