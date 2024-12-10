@@ -8,7 +8,11 @@ const Page = () => {
 
   useEffect(() => {
     const newSearchParams = new URLSearchParams(searchParams);
-    router.push(newSearchParams.get("page"));
+    if (newSearchParams.get("page")) {
+      router.push();
+    } else {
+      router.push("/404");
+    }
   }, []);
   return <div></div>;
 };

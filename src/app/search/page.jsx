@@ -2,6 +2,15 @@ import { getServerSideData } from "@/utils/get-api";
 import Layout from "@/layout/page";
 import { Categories, Products } from "@/views/departments";
 
+export async function generateMetadata({ searchParams }) {
+  const { search } = (await searchParams) || {};
+
+  return {
+    title: `${search} products`,
+    description: `Search products for ${search}`,
+  };
+}
+
 const Page = async ({ searchParams }) => {
   const {
     search,

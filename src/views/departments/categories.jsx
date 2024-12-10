@@ -18,8 +18,8 @@ const Categories = ({ totalProducts, breadcrumbs, categories }) => {
   const endIndex = Math.min(page * ITEMS_PER_PAGE, totalProducts);
   return (
     <div className="max-w-[1600px] w-full mx-auto px-4 sm:px-8">
-      <div className="flex flex-col sm:flex-row gap-y-4 items-start justify-between w-full py-8 border-b border-[#0000001b]">
-        <div className="flex gap-1">
+      <div className="flex flex-col sm:flex-row flex-wrap gap-y-4 items-start justify-between w-full py-8 border-b border-[#0000001b]">
+        <div className="flex gap-1 flex-wrap">
           {breadcrumbs?.map((item, index) =>
             index !== breadcrumbs?.length - 1 ? (
               <Link

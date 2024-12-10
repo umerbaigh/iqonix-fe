@@ -3,9 +3,14 @@ import { Navigate } from "@/icons";
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const ProductDetail = ({ product }) => {
   //   console.log("product", product);
+  const router = useRouter();
+  if (!product) {
+    router.push("/404");
+  }
   const [selectedImage, setSelectedImage] = useState(product?.product_image1);
   const productImageArr = [
     product?.product_image1,

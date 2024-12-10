@@ -9,7 +9,9 @@ export async function getServerSideData(url = "", check = false) {
   });
 
   if (!res.ok) {
-    throw new Error("Failed to fetch data");
+    // throw new Error("Failed to fetch data");
+    console.error("Failed to fetch data");
+    return null; // Return null to avoid breaking the component
   }
 
   const repo = await res.json();

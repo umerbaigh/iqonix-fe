@@ -1,4 +1,6 @@
+"use client";
 import { Navigate } from "@/icons";
+import { Tooltip } from "@material-tailwind/react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -9,6 +11,12 @@ const calculateDiscount = (regularPrice, salePrice) => {
     return Math.round(discount);
   }
   return 0;
+};
+
+const truncateTitle = (title, maxLength = 17) => {
+  return title.length > maxLength
+    ? title.substring(0, maxLength) + "..."
+    : title;
 };
 
 const ProductCard = ({ product, isSearch }) => {
@@ -57,21 +65,45 @@ const ProductCard = ({ product, isSearch }) => {
               {product_name}
             </h3>
           </Link>
-          {category && (
-            <Link
-              href={`/cat/${category?.slug}`}
-              className="text-xs text-[#A5A5A5] font-lato hover:text-third py-2 block w-fit"
-            >
-              {category?.name}
-            </Link>
+          {category?.name && category?.slug && (
+            <div>
+              <Tooltip content={category?.slug || ""} placement="bottom">
+                <Link
+                  href={`/cat/${category?.slug}`}
+                  className="text-xs text-[#A5A5A5] font-lato hover:text-third py-2 sm:block w-fit hidden"
+                >
+                  {truncateTitle(category?.name, 20)}
+                </Link>
+              </Tooltip>
+              <Tooltip content={category?.slug || ""} placement="bottom">
+                <Link
+                  href={`/cat/${category?.slug}`}
+                  className="text-xs text-[#A5A5A5] font-lato hover:text-third py-2 block w-fit sm:hidden"
+                >
+                  {truncateTitle(category?.name)}
+                </Link>
+              </Tooltip>
+            </div>
           )}
-          {shop && (
-            <Link
-              href={`/shop/${shop?.slug}`}
-              className="text-xs text-[#A5A5A5] font-lato hover:text-third"
-            >
-              {shop?.name}
-            </Link>
+          {shop?.name && shop?.slug && (
+            <div>
+              <Tooltip content={shop?.slug || ""} placement="bottom">
+                <Link
+                  href={`/shop/${shop?.slug}`}
+                  className="text-xs text-[#A5A5A5] font-lato hover:text-third sm:block w-fit hidden"
+                >
+                  {truncateTitle(shop?.name, 20)}
+                </Link>
+              </Tooltip>
+              <Tooltip content={shop?.slug || ""} placement="bottom">
+                <Link
+                  href={`/shop/${shop?.slug}`}
+                  className="text-xs text-[#A5A5A5] font-lato hover:text-third block w-fit sm:hidden"
+                >
+                  {truncateTitle(shop?.name)}
+                </Link>
+              </Tooltip>
+            </div>
           )}
           <p className="text-primary text-sm font-semibold font-lato py-2">
             {regular_price !== sale_price && (

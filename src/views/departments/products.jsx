@@ -286,6 +286,10 @@ const Products = ({
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
+  if (!departmentName) {
+    router.push("/404");
+  }
+
   const toggleMenu = () => {
     setOpen(!open);
   };
@@ -372,7 +376,7 @@ const Products = ({
           }`}
         >
           <div className="flex flex-col lg:flex-row justify-between gap-y-8 lg:items-center mb-4 px-4 sm:px-8 py-8 bg-[#f8f8f8] w-full">
-            <h2 className="text-2xl font-poppins font-semibold text-[#242424]">
+            <h2 className="text-2xl font-poppins font-semibold text-[#242424] truncate">
               {departmentName}
             </h2>
             {totalProducts > 0 && (

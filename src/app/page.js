@@ -9,6 +9,13 @@ import {
   Shop,
 } from "@/views/home";
 
+export async function metadata() {
+  return {
+    title: "Iqonix Home Page",
+    description: "Iqonix Home Page",
+  };
+}
+
 const Page = async () => {
   const urls = {
     hero: `/home-hero-section/?populate=*`,

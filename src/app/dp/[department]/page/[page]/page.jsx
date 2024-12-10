@@ -2,6 +2,19 @@ import { getServerSideData } from "@/utils/get-api";
 import Layout from "@/layout/page";
 import { Categories, Products } from "@/views/departments";
 
+export async function generateMetadata({ params }) {
+  const { department } = await params;
+  const resp = await getServerSideData(
+    `/departments/?filters[slug][$eq]=${department}`,
+    true
+  );
+
+  return {
+    title: resp?.data[0]?.attributes?.name,
+    description: `Department ${resp?.data[0]?.attributes?.name}`,
+  };
+}
+
 const Page = async ({ params, searchParams }) => {
   const {
     order,

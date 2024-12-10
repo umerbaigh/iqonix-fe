@@ -6,20 +6,34 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const Products = ({ data }) => {
-  const [selected, setSelected] = useState(data?.search_words[0]?.text);
+  const [selected, setSelected] = useState(data?.search_words[0]);
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
+
+  const updateSearchParams = (url, params) => {
+    const urlObj = new URL(url, "https://example.com"); // Provide a base URL for relative URLs
+    Object.keys(params).forEach((key) => {
+      urlObj.searchParams.set(key, params[key]); // Add or update query parameters
+    });
+    return urlObj.toString().replace("https://example.com", ""); // Remove the base URL
+  };
 
   useEffect(() => {
     async function fetchProducts() {
       setLoading(true);
       try {
-        const resp = await getServerSideData(
-          `/custom-products?search_word=${selected}&page=1&pageSize=5`,
-          true
+        const updatedUrl = updateSearchParams(selected?.link, {
+          sales: "true",
+          page: "1",
+          pageSize: "5",
+        });
+        const resp = await getServerSideData(`${updatedUrl}`, true);
+        console.log(
+          updatedUrl.includes("custom-products/") ? resp?.data : resp?.products
         );
-        // console.log(resp?.data);
-        setProducts(resp?.data);
+        setProducts(
+          updatedUrl.includes("custom-products/") ? resp?.data : resp?.products
+        );
       } catch (error) {
         console.error("Error fetching products:", error);
         setLoading(false);
@@ -32,8 +46,8 @@ const Products = ({ data }) => {
   }, [selected]);
 
   // Category selection handler
-  const handleCategorySelect = (text) => {
-    setSelected(text);
+  const handleCategorySelect = (item) => {
+    setSelected(item);
   };
 
   return (
@@ -50,7 +64,7 @@ const Products = ({ data }) => {
             <div
               key={index}
               className="flex items-center gap-2 cursor-pointer"
-              onClick={() => handleCategorySelect(item?.text)}
+              onClick={() => handleCategorySelect(item)}
             >
               <Image
                 src={item?.icon?.data?.attributes?.url}
@@ -60,7 +74,7 @@ const Products = ({ data }) => {
               />
               <p
                 className={`text-sm font-poppins font-semibold uppercase ${
-                  selected === item?.text ? "text-[#83B735]" : "text-third"
+                  selected === item ? "text-[#83B735]" : "text-third"
                 }`}
               >
                 {item?.text}

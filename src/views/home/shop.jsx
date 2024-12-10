@@ -90,7 +90,7 @@ const Shop = ({ data }) => {
               className="flex justify-center items-center w-full h-full outline-none"
             >
               <Link
-                href={item?.attributes?.slug}
+                href={`/shop/${item?.attributes?.slug}`}
                 className="w-fit outline-none"
                 onClick={(e) => {
                   if (isDragging) {

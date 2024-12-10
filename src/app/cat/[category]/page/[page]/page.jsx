@@ -3,6 +3,19 @@ import { getGraphql } from "@/utils/get-graphql-api";
 import Layout from "@/layout/page";
 import { Categories, Products } from "@/views/departments";
 
+export async function generateMetadata({ params }) {
+  const { category } = await params;
+  const resp = await getServerSideData(
+    `/categories/?filters[slug][$eq]=${category}`,
+    true
+  );
+
+  return {
+    title: resp?.data[0]?.attributes?.name,
+    description: `Category ${resp?.data[0]?.attributes?.name}`,
+  };
+}
+
 const Page = async ({ params, searchParams }) => {
   const {
     delivery,
