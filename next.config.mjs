@@ -22,6 +22,7 @@ const nextConfig = {
         port: "",
       },
     ],
+    unoptimized: false,
   },
   trailingSlash: true,
   reactStrictMode: false,
