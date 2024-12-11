@@ -53,6 +53,7 @@ const ProductCard = ({ product, isSearch }) => {
             height={250}
             className="rounded-md object-cover"
             loading="lazy"
+            priority={true}
             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..." // Add a base64 blur placeholder
             placeholder="blur"
           />
