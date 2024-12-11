@@ -52,6 +52,9 @@ const ProductCard = ({ product, isSearch }) => {
             width={500}
             height={250}
             className="rounded-md object-cover"
+            loading="lazy"
+            blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..." // Add a base64 blur placeholder
+            placeholder="blur"
           />
           {discount > 0 && (
             <span className="absolute top-2 left-2 flex items-center justify-center bg-red-500 text-white font-lato text-xs font-bold w-10 h-10 rounded-full">
