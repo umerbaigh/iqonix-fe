@@ -19,6 +19,15 @@ const truncateTitle = (title, maxLength = 17) => {
     : title;
 };
 
+const truncateName = (name, maxLength = 17) => {
+  return name
+    .split(" ")
+    .map((word) =>
+      word.length > maxLength ? word.substring(0, 17) + "..." : word
+    )
+    .join(" ");
+};
+
 const ProductCard = ({ product, isSearch }) => {
   const {
     product_name,
@@ -53,7 +62,6 @@ const ProductCard = ({ product, isSearch }) => {
             height={250}
             className="rounded-md object-cover"
             loading="lazy"
-            priority={true}
             blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRg..." // Add a base64 blur placeholder
             placeholder="blur"
           />
@@ -64,11 +72,18 @@ const ProductCard = ({ product, isSearch }) => {
           )}
         </Link>
         <div className="mt-3 mx-2">
-          <Link href={`/pr/${slug}`} className="w-fit block">
-            <h3 className="text-sm font-poppins text-third font-medium">
-              {product_name}
-            </h3>
-          </Link>
+          <Tooltip
+            content={product_name || ""}
+            placement="bottom"
+            className="max-w-[300px]"
+          >
+            <Link href={`/pr/${slug}`} className="w-fit block">
+              <h3 className="text-xs sm:text-sm font-poppins text-third font-medium break-words">
+                {truncateName(product_name)}
+              </h3>
+            </Link>
+          </Tooltip>
+
           {category?.name && category?.slug && (
             <div>
               <Tooltip content={category?.slug || ""} placement="bottom">
