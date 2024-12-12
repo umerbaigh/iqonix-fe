@@ -286,9 +286,13 @@ const Products = ({
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
-  if (!departmentName) {
-    router.push("/404");
-  }
+  useEffect(() => {
+    if (!departmentName) {
+      router.push("/404");
+    }
+  }, [departmentName, router]);
+
+  if (!departmentName) return null;
 
   const toggleMenu = () => {
     setOpen(!open);
