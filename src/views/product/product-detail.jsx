@@ -7,10 +7,13 @@ import { useRouter } from "next/navigation";
 
 const ProductDetail = ({ product }) => {
   //   console.log("product", product);
-  const router = useRouter();
-  if (!product) {
-    router.push("/404");
-  }
+  useEffect(() => {
+    if (!product) {
+      router.push("/404");
+    }
+  }, [product, router]);
+
+  if (!product) return null;
   const [selectedImage, setSelectedImage] = useState(product?.product_image1);
   const productImageArr = [
     product?.product_image1,
