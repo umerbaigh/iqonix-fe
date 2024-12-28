@@ -160,28 +160,190 @@ const ProductDetail = ({ product }) => {
         </div>
         <div className="bg-[#fafafa] text-secondary font-lato text-sm font-semibold px-4 py-6 rounded-lg md:w-[45%]">
           <h2 className="text-[22px] font-poppins mb-4">Product Detail</h2>
-          {product?.color && (
+          {product?.delivery && (
             <div className="w-full flex items-center justify-between pb-4">
-              <p>Color</p>
-              <p>{product?.color}</p>
+              <p>delivery</p>
+              <p>{product?.delivery}</p>
             </div>
           )}
-          {product?.width && (
+          {product?.damen_normalgr && (
             <div className="w-full flex items-center justify-between pb-4">
-              <p>Width</p>
-              <p>{product?.width}</p>
+              <p>Damen Normalgr</p>
+              <p>{product?.damen_normalgr}</p>
             </div>
           )}
-          {product?.height && (
+          {product?.damen_jeansgr && (
             <div className="w-full flex items-center justify-between pb-4">
-              <p>Height</p>
-              <p>{product?.height}</p>
+              <p>Damen Jeansgr</p>
+              <p>{product?.damen_jeansgr}</p>
             </div>
           )}
-          {product?.depth && (
+          {product?.damen_kurzgr && (
             <div className="w-full flex items-center justify-between pb-4">
-              <p>Depth</p>
-              <p>{product?.depth}</p>
+              <p>Damen Kurzgr</p>
+              <p>{product?.damen_kurzgr}</p>
+            </div>
+          )}
+          {product?.damen_langgr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Damen Langgr</p>
+              <p>{product?.damen_langgr}</p>
+            </div>
+          )}
+          {product?.cup_gr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Cup Gr</p>
+              <p>{product?.cup_gr}</p>
+            </div>
+          )}
+          {product?.brustumfang && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Brustumfang</p>
+              <p>{product?.brustumfang}</p>
+            </div>
+          )}
+          {product?.miederhosengr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Miederhosengr</p>
+              <p>{product?.miederhosengr}</p>
+            </div>
+          )}
+          {product?.strumpfhosengr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Strumpfhosengr</p>
+              <p>{product?.strumpfhosengr}</p>
+            </div>
+          )}
+          {product?.sockengr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Sockengr</p>
+              <p>{product?.sockengr}</p>
+            </div>
+          )}
+          {product?.herren_normalgr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Herren Normalgr</p>
+              <p>{product?.herren_normalgr}</p>
+            </div>
+          )}
+          {product?.herren_jeansgr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Herren Jeansgr</p>
+              <p>{product?.herren_jeansgr}</p>
+            </div>
+          )}
+          {product?.kragenweite && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Kragenweite</p>
+              <p>{product?.kragenweite}</p>
+            </div>
+          )}
+          {product?.herren_untersetztgr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Herren Untersetztgr</p>
+              <p>{product?.herren_untersetztgr}</p>
+            </div>
+          )}
+          {product?.herren_schlankgr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Herren Schlankgr</p>
+              <p>{product?.herren_schlankgr}</p>
+            </div>
+          )}
+          {product?.waschegr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Waschegr</p>
+              <p>{product?.waschegr}</p>
+            </div>
+          )}
+          {product?.herren_bauchgr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Herren Bauchgr</p>
+              <p>{product?.herren_bauchgr}</p>
+            </div>
+          )}
+          {product?.baby_normalgr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Baby Normalgr</p>
+              <p>{product?.baby_normalgr}</p>
+            </div>
+          )}
+          {product?.kinder_normalg && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Kinder Normalg</p>
+              <p>{product?.kinder_normalg}</p>
+            </div>
+          )}
+          {product?.kinder_sockengr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Kinder Sockengr</p>
+              <p>{product?.kinder_sockengr}</p>
+            </div>
+          )}
+          {product?.schuhgr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Schuhgr</p>
+              <p>{product?.schuhgr}</p>
+            </div>
+          )}
+          {product?.kinder_schuhgr && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Kinder Schuhgr</p>
+              <p>{product?.kinder_schuhgr}</p>
+            </div>
+          )}
+          {product?.fashion_material && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Fashion Material</p>
+              <p>{product?.fashion_material}</p>
+            </div>
+          )}
+          {product?.fashion_color && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Fashion Color</p>
+              <p>{product?.fashion_color}</p>
+            </div>
+          )}
+          {product?.shoes_material && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Shoes Material</p>
+              <p>{product?.shoes_material}</p>
+            </div>
+          )}
+          {product?.shoes_color && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Shoes Color</p>
+              <p>{product?.shoes_color}</p>
+            </div>
+          )}
+          {product?.breite && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Breite</p>
+              <p>{product?.breite}</p>
+            </div>
+          )}
+          {product?.hoehe && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Hoehe</p>
+              <p>{product?.hoehe}</p>
+            </div>
+          )}
+          {product?.tiefe && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Tiefe</p>
+              <p>{product?.tiefe}</p>
+            </div>
+          )}
+          {product?.furniture_color && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Furniture Color</p>
+              <p>{product?.furniture_color}</p>
+            </div>
+          )}
+          {product?.furniture_material && (
+            <div className="w-full flex items-center justify-between pb-4">
+              <p>Furniture Material</p>
+              <p>{product?.furniture_material}</p>
             </div>
           )}
           {product?.shops?.data[0]?.attributes?.name && (
